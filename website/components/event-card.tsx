@@ -29,7 +29,7 @@ function EventListing({ event }: { event: EventItem }) {
       href={`/events?event=${event.id}`}
       className="grid scroll-mt-28 overflow-hidden rounded-sm border border-ink/10 bg-paper transition-colors duration-200 hover:border-ink/25 hover:bg-cream/40 md:grid-cols-12"
     >
-      <div className="relative aspect-[3/4] bg-paper md:col-span-5">
+      <div className="relative aspect-[16/10] overflow-hidden bg-cream md:col-span-5 md:aspect-auto md:h-full md:min-h-64">
         {event.imageSrc ? (
           <Image
             src={event.imageSrc}

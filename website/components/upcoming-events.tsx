@@ -36,7 +36,7 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
 function HomeEventCard({ event }: { event: EventItem }) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded border border-ink/10 bg-paper">
-      <div className="relative aspect-[3/4] bg-paper">
+      <div className="relative aspect-video overflow-hidden bg-cream">
         {event.imageSrc ? (
           <Image
             src={event.imageSrc}
