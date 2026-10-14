@@ -1,77 +1,133 @@
-import type { Metadata } from "next";
-import { buttonClasses } from "@/components/button-link";
+import Link from "next/link";
+import { ContactForm } from "@/components/contact-form";
 import { Container } from "@/components/container";
-import { PageHero } from "@/components/page-hero";
-import { corporateContact, socials, sponsorshipMailto } from "@/data/site";
+import { sectionTitle } from "@/components/type";
+import { socials } from "@/data/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata = pageMetadata({
+  title: "Contact BTG | Business Technologies Guelph",
   description:
-    "Reach Business Technologies Guelph on Instagram, TikTok, and LinkedIn, or write to Corporate Relations.",
-};
+    "Connect with Business Technologies Guelph through our official social media channels and learn how to reach our corporate relations team.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
     <>
-      <PageHero
-        eyebrow="Contact"
-        title="Official channels, and one corporate inbox."
-        lede="Students and guests should follow BTG where the club actually posts. Companies should write to Corporate Relations. A general club email has not been published."
-      />
-
       <section className="bg-cream">
-        <Container className="py-20 md:py-28">
-          <p className="font-serif text-2xl italic text-pine">Social</p>
-          <h2 className="mt-3 text-4xl tracking-[-0.05em]">Where BTG posts</h2>
-          <ul className="mt-12 grid gap-5 md:grid-cols-3">
-            {socials.map((social) => (
-              <li key={social.href}>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-full flex-col justify-between border border-ink/10 bg-paper p-6 transition-colors duration-200 hover:border-ink md:min-h-56"
-                >
-                  <span className="text-sm text-pine">{social.handle}</span>
-                  <span>
-                    <span className="block text-3xl tracking-[-0.05em]">{social.name}</span>
-                    <span className="mt-3 block text-sm text-pine">
-                      Opens in a new tab
-                    </span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+        <Container className="py-14 text-center md:py-16">
+          <p className="text-xs font-medium tracking-[0.16em] text-pine">CONTACT</p>
+          <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-medium leading-[1.08] tracking-[-0.05em] text-ink md:text-5xl">
+            Let&apos;s connect.
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-pine md:text-lg md:leading-8">
+            Have a question, want to get involved, or interested in working with BTG? We&apos;d love
+            to hear from you.
+          </p>
         </Container>
       </section>
 
       <section className="bg-paper">
-        <Container className="grid gap-10 py-20 md:py-28 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <p className="font-serif text-2xl italic text-pine">Companies</p>
-            <h2 className="mt-3 text-4xl tracking-[-0.05em]">Corporate inquiries</h2>
-            <p className="mt-5 leading-relaxed text-pine">
-              Sponsorship, workshops, and Prompt & Pitch all start with the same
-              person. There is no form on this site — write directly.
+        <Container className="py-14 md:py-16">
+          <div className="mx-auto max-w-[720px] text-center">
+            <h2 className={sectionTitle}>Send us a message</h2>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-pine">
+              Tell us what you&apos;re reaching out about. Sending is turned off until BTG confirms
+              where messages should go.
             </p>
           </div>
-          <div className="on-ink bg-ink p-8 text-cream md:p-10 lg:col-span-7">
-            <p className="text-sm text-cream/70">{corporateContact.role}</p>
-            <p className="mt-2 text-4xl tracking-[-0.05em]">{corporateContact.name}</p>
-            <a
-              href={sponsorshipMailto()}
-              className={buttonClasses("inverse", "mt-8")}
-            >
-              {corporateContact.email}
-            </a>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-cream/70">
-              Use this address for partnership questions. It is not a general
-              inbox for membership or event registration.
-            </p>
+          <div className="mt-8">
+            <ContactForm startedAt={0} />
           </div>
         </Container>
       </section>
+
+      <section className="bg-paper">
+        <Container className="py-16 lg:py-20">
+          <h2 className="text-3xl font-medium leading-[1.08] tracking-[-0.05em] text-ink md:text-[2.5rem]">
+            Looking for something specific?
+          </h2>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:mt-9 lg:gap-5">
+            <NavCard
+              href="/partner"
+              title="Partnerships"
+              description="Interested in sponsorships or collaborating with BTG?"
+              className="on-ink bg-ink text-cream hover:bg-[#314044]"
+            />
+            <NavCard
+              href="/events"
+              title="Upcoming Events"
+              description="Explore upcoming events and opportunities to get involved."
+              className="on-ink bg-pine text-cream hover:bg-[#4d6166]"
+            />
+            <NavCard
+              href="/team"
+              title="Meet the Team"
+              description="Learn more about the students behind BTG."
+              className="on-ink bg-sage text-white hover:bg-[#6d7d74]"
+            />
+            <NavCard
+              href={socials.find((item) => item.name === "Instagram")?.href ?? ""}
+              title="Stay Connected"
+              description="Follow BTG for event updates and announcements."
+              external
+              className="bg-[#E2E8E1] text-ink hover:bg-[#d5ddd4]"
+            />
+          </ul>
+        </Container>
+      </section>
     </>
+  );
+}
+
+function NavCard({
+  href,
+  title,
+  description,
+  className,
+  external = false,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  className: string;
+  external?: boolean;
+}) {
+  const classes = `group flex min-h-48 flex-col rounded-sm p-6 transition-colors duration-200 sm:min-h-52 lg:min-h-56 lg:p-8 ${className}`;
+  const content = (
+    <>
+      <h3 className="text-2xl font-medium tracking-[-0.04em]">{title}</h3>
+      <p className="mt-2 max-w-sm text-base leading-6">{description}</p>
+      <svg
+        aria-hidden
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        className="mt-auto pt-6 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
+      >
+        <path d="M4 12 12 4M6 4h6v6" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    </>
+  );
+
+  if (external) {
+    return (
+      <li>
+        <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+          {content}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <Link href={href} className={classes}>
+        {content}
+      </Link>
+    </li>
   );
 }

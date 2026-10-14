@@ -14,7 +14,7 @@ const variants = {
 export type ButtonVariant = keyof typeof variants;
 
 export function buttonClasses(variant: ButtonVariant, className = "") {
-  return `inline-flex min-h-12 items-center justify-center px-5 text-sm tracking-[-0.03em] transition-colors duration-200 ${variants[variant]} ${className}`;
+  return `inline-flex min-h-11 items-center justify-center px-5 text-sm font-medium tracking-[-0.03em] transition-colors duration-200 ${variants[variant]} ${className}`;
 }
 
 export function ButtonLink({

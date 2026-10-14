@@ -3,6 +3,7 @@ import { Instrument_Serif, Inter } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { club } from "@/data/site";
+import { indexingEnabled, siteOrigin } from "@/lib/site-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,12 +20,18 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
+const origin = siteOrigin();
+
 export const metadata: Metadata = {
+  metadataBase: origin ?? undefined,
   title: {
-    default: club.name,
-    template: `%s · ${club.name}`,
+    default: `${club.name} | ${club.tagline}`,
+    template: `%s | ${club.name}`,
   },
   description: club.description,
+  robots: indexingEnabled()
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
   icons: {
     icon: "/brand/btg-logo.png",
     apple: "/brand/btg-logo.png",

@@ -1,19 +1,15 @@
 /**
- * Profiles stay empty until portraits are approved after media day.
- * To publish someone, add an entry below. Do not add phone numbers.
- * Leave imageSrc unset until the photograph is approved.
+ * Add an approved executive here to publish them.
+ * Leave the list empty until a name, role, and any portrait are approved.
+ * Do not add phone numbers.
  */
 export type ExecutiveProfile = {
   name: string;
   role: string;
-  focus: string;
   imageSrc?: string;
   imageAlt?: string;
-};
-
-export const mediaDay = {
-  label: "October 24, 2026",
-  iso: "2026-10-24",
+  linkedIn?: string;
+  biography?: string;
 };
 
 export const executives: ExecutiveProfile[] = [];

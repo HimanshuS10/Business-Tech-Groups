@@ -1,61 +1,90 @@
 import Image from "next/image";
 import type { ExecutiveProfile } from "@/data/team";
-import { mediaDay } from "@/data/team";
 
-export function TeamRoster({ people }: { people: ExecutiveProfile[] }) {
-  if (people.length === 0) {
-    return (
-      <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
-          <p className="font-serif text-5xl italic leading-none text-ink md:text-7xl">
-            Coming soon
-          </p>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-pine">
-            Leadership is holding team photography until after the{" "}
-            <time dateTime={mediaDay.iso}>{mediaDay.label}</time> media day.
-            Executive profiles will be published here once portraits are approved.
-          </p>
+const placeholderCount = 6;
+
+const gridClass =
+  "grid grid-cols-1 gap-x-6 gap-y-9 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-11 lg:grid-cols-3";
+
+function PersonMark() {
+  return (
+    <svg aria-hidden width="40" height="40" viewBox="0 0 40 40" fill="none" className="text-sage">
+      <circle cx="20" cy="14" r="6" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8.5 32.5c1.6-6.2 5.8-9 11.5-9s9.9 2.8 11.5 9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function Portrait({ src, alt }: { src?: string; alt: string }) {
+  return (
+    <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-[#E4E7E2]">
+      {src ? (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 100vw"
+          className="object-cover"
+        />
+      ) : (
+        <div className="absolute inset-0 grid place-items-center">
+          <PersonMark />
         </div>
-        <div className="border border-ink/10 bg-paper p-6 lg:col-span-5">
-          <p className="text-sm text-pine">A published profile will include</p>
-          <ul className="mt-4 space-y-3 text-lg tracking-[-0.04em]">
-            <li className="border-b border-ink/10 pb-3">Name</li>
-            <li className="border-b border-ink/10 pb-3">Role</li>
-            <li>A short note on their focus</li>
-          </ul>
-          <p className="mt-6 text-sm leading-relaxed text-pine">
-            Personal phone numbers will not be published. Biographies stay off
-            this page until the executive has approved them.
-          </p>
-        </div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
+}
+
+function PlaceholderGrid() {
+  return (
+    <>
+      <ul aria-hidden="true" className={gridClass}>
+        {Array.from({ length: placeholderCount }, (_, index) => (
+          <li key={index}>
+            <Portrait alt="" />
+            <div className="mt-4">
+              <div className="h-3 w-2/3 rounded-sm bg-sage/35" />
+              <div className="mt-2 h-2.5 w-2/5 rounded-sm bg-sage/20" />
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-10 text-center text-sm tracking-[-0.02em] text-pine">
+        2026–27 executive profiles coming soon.
+      </p>
+    </>
+  );
+}
+
+export function TeamRoster({ people }: { people: readonly ExecutiveProfile[] }) {
+  if (people.length === 0) return <PlaceholderGrid />;
 
   return (
-    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className={gridClass}>
       {people.map((person) => (
-        <li key={`${person.name}-${person.role}`} className="border border-ink/10 bg-paper">
-          <div className="relative aspect-[4/5] bg-cream">
-            {person.imageSrc ? (
-              <Image
-                src={person.imageSrc}
-                alt={person.imageAlt ?? ""}
-                fill
-                sizes="(min-width: 1024px) 320px, 100vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex h-full items-end p-5">
-                <p className="font-serif text-3xl italic text-pine">Portrait forthcoming</p>
-              </div>
-            )}
-          </div>
-          <div className="p-5">
-            <h2 className="text-2xl tracking-[-0.04em]">{person.name}</h2>
-            <p className="mt-1 text-sm text-pine">{person.role}</p>
-            <p className="mt-4 text-sm leading-relaxed text-pine">{person.focus}</p>
-          </div>
+        <li key={`${person.name}-${person.role}`}>
+          <Portrait src={person.imageSrc} alt={person.imageAlt ?? person.name} />
+          <h3 className="mt-4 text-xl font-medium tracking-[-0.04em] text-ink">{person.name}</h3>
+          <p className="mt-1 text-sm text-pine">{person.role}</p>
+          {person.biography ? (
+            <p className="mt-3 text-sm leading-relaxed text-pine">{person.biography}</p>
+          ) : null}
+          {person.linkedIn ? (
+            <a
+              href={person.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+            >
+              LinkedIn
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          ) : null}
         </li>
       ))}
     </ul>
