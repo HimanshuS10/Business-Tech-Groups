@@ -3,8 +3,7 @@ import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { UpcomingEvents } from "@/components/upcoming-events";
 import { FaqList } from "@/components/faq-list";
-import { HeroPhotos } from "@/components/hero-photos";
-import { ImpactPreview } from "@/components/impact-preview";
+import { HeroMosaic } from "@/components/hero-photos";
 import { PartnershipsPreview } from "@/components/partnerships-preview";
 import { eyebrow, sectionTitle } from "@/components/type";
 import { faqs } from "@/data/faq";
@@ -31,7 +30,35 @@ export default function HomePage() {
             <h1 className="mt-4 text-5xl leading-[0.95] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
               Where Business
               <span className="mt-1 block font-serif text-[1.05em] font-normal tracking-normal italic">
-                Meets Tech
+                <span className="relative inline-block">
+                  Meets Tech
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 300 24"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    className="pointer-events-none absolute -bottom-[0.2em] -left-[3%] h-[0.32em] w-[106%] text-[#9FC4A8]"
+                  >
+                    <path
+                      className="hero-underline"
+                      pathLength={1}
+                      d="M4 15C60 6 150 3 296 9"
+                      stroke="currentColor"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                    <path
+                      className="hero-underline hero-underline-second"
+                      pathLength={1}
+                      d="M14 21C80 14 170 13 250 17"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  </svg>
+                </span>
               </span>
             </h1>
             <p className="mt-6 max-w-md text-base leading-7 text-cream/80 md:text-lg md:leading-8">
@@ -49,7 +76,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="lg:col-span-6">
-            <HeroPhotos
+            <HeroMosaic
               photos={[
                 {
                   src: "/images/btg/btg-panel-discussion.webp",
@@ -60,6 +87,10 @@ export default function HomePage() {
                   src: "/images/btg/btg-networking-candid.webp",
                   alt: "Students talking after the Smarter Than AI Panel",
                   position: "object-[center_28%]",
+                },
+                {
+                  src: "/images/btg/btg-panel-speakers.webp",
+                  alt: "Speakers at the Smarter Than AI Panel",
                 },
                 {
                   src: "/images/btg/btg-student-group-event.webp",
@@ -74,8 +105,6 @@ export default function HomePage() {
       <AboutPreview />
 
       <UpcomingEvents events={upcomingEvents} />
-
-      <ImpactPreview />
 
       <PartnershipsPreview />
 

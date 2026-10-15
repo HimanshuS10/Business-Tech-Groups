@@ -72,8 +72,9 @@ export default function EventsPage() {
             </div>
           </div>
           <EventsHeroPhoto
-            src="/images/btg/btg-panel-discussion.webp"
-            alt="Panelists speaking at the Smarter Than AI Panel"
+            src="/images/btg/btg-event-photo-audience.webp"
+            alt="Students seated at tables during a BTG event"
+            position="object-[center_58%]"
           />
         </Container>
       </section>
@@ -172,7 +173,7 @@ export default function EventsPage() {
         </Container>
       </section>
       <Suspense fallback={null}>
-        <EventDetailModal events={upcomingEvents} />
+        <EventDetailModal events={[...upcomingEvents, ...pastEvents]} />
       </Suspense>
     </>
   );

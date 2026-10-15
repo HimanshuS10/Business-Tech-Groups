@@ -1,11 +1,10 @@
-import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Our Team | Business Technologies Guelph",
   description:
-    "Meet the student leadership behind Business Technologies Guelph. Executive team profiles and photography will be available following approval.",
+    "Meet the student leadership behind Business Technologies Guelph. Our full team is coming soon.",
   path: "/team",
 });
 
@@ -18,12 +17,8 @@ export default function TeamPage() {
           Meet the Team.
         </h1>
         <p className="mt-5 max-w-md text-base leading-7 text-pine">
-          Our 2026–27 executive team will be introduced soon. Check back after our upcoming team
-          media day.
+          Our full team is coming soon.
         </p>
-        <ButtonLink href="/events" className="mt-8">
-          Explore BTG Events
-        </ButtonLink>
       </Container>
     </section>
   );

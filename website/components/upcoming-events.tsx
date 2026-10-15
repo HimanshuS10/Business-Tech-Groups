@@ -3,6 +3,14 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { eyebrow, sectionTitle } from "@/components/type";
+import {
+  EventCardCta,
+  EventMeta,
+  PhotoMark,
+  eventCardImage,
+  eventCardSurface,
+  eventCtaLabel,
+} from "@/components/event-card";
 import type { EventItem } from "@/data/events";
 
 export function UpcomingEvents({ events }: { events: EventItem[] }) {
@@ -35,7 +43,11 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
 
 function HomeEventCard({ event }: { event: EventItem }) {
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded border border-ink/10 bg-paper">
+    <Link
+      href={`/events?event=${event.id}`}
+      aria-label={`${eventCtaLabel(event)}: ${event.title}`}
+      className={`${eventCardSurface} flex h-full flex-col`}
+    >
       <div className="relative aspect-video overflow-hidden bg-cream">
         {event.imageSrc ? (
           <Image
@@ -43,7 +55,7 @@ function HomeEventCard({ event }: { event: EventItem }) {
             alt={event.imageAlt ?? ""}
             fill
             sizes="(min-width: 1024px) 22rem, (min-width: 768px) 46vw, 100vw"
-            className="object-contain"
+            className={eventCardImage}
             quality={90}
           />
         ) : (
@@ -54,46 +66,17 @@ function HomeEventCard({ event }: { event: EventItem }) {
         )}
       </div>
       <div className="flex flex-1 flex-col p-5 md:p-6">
-        <p className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">{event.dateLabel}</p>
-        <h3 className="mt-3 text-2xl font-semibold leading-[1.15] tracking-[-0.04em] text-ink">
+        <h3 className="text-2xl font-semibold leading-[1.15] tracking-[-0.04em] text-ink">
           {event.title}
         </h3>
-        {event.timeLabel ? (
-          <p className="mt-2 text-sm font-medium tracking-[-0.02em] text-pine">{event.timeLabel}</p>
-        ) : null}
+        <EventMeta event={event} className="mt-2" />
         <p className="mt-3 text-sm leading-relaxed text-pine">{event.preview ?? event.summary}</p>
-        <Link
-          href={`/events?event=${event.id}`}
-          className="mt-auto inline-flex min-h-11 items-center gap-2 pt-6 text-sm font-medium tracking-[-0.03em] text-ink underline decoration-ink/30 underline-offset-4 transition-colors duration-200 hover:decoration-ink"
-        >
-          View Event Details
-          <ArrowUpRight />
-        </Link>
+        <div className="mt-auto pt-6">
+          <div className="flex items-center justify-end border-t border-ink/10 pt-4">
+            <EventCardCta event={event} />
+          </div>
+        </div>
       </div>
-    </article>
-  );
-}
-
-function ArrowUpRight() {
-  return (
-    <svg aria-hidden width="14" height="14" viewBox="0 0 16 16" fill="none">
-      <path
-        d="M4.5 11.5 11.5 4.5M7 4.5h4.5V9"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function PhotoMark() {
-  return (
-    <svg aria-hidden width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect x="3.5" y="5.5" width="21" height="17" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="10" cy="11" r="1.6" fill="currentColor" />
-      <path d="M6.5 19.5 11.5 14.5 15 17.5 18.5 13.5 21.5 16.5" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
+    </Link>
   );
 }

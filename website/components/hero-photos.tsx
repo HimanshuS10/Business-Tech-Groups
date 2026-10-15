@@ -24,6 +24,28 @@ export function HeroPhotos({ photos }: { photos: readonly [HeroPhoto, HeroPhoto,
   );
 }
 
+/** Landscape + portrait over portrait + landscape, as on the home hero. */
+const mosaicFrames = [
+  { className: "col-span-5", sizes: "(min-width: 1024px) 32vw, 70vw" },
+  { className: "col-span-2", sizes: "(min-width: 1024px) 13vw, 30vw" },
+  { className: "col-span-2", sizes: "(min-width: 1024px) 13vw, 30vw" },
+  { className: "col-span-5", sizes: "(min-width: 1024px) 32vw, 70vw" },
+] as const;
+
+export function HeroMosaic({
+  photos,
+}: {
+  photos: readonly [HeroPhoto, HeroPhoto, HeroPhoto, HeroPhoto];
+}) {
+  return (
+    <div className="grid aspect-6/5 grid-cols-7 grid-rows-2 gap-3">
+      {mosaicFrames.map((frame, index) => (
+        <PhotoFrame key={frame.className + index} photo={photos[index]} {...frame} />
+      ))}
+    </div>
+  );
+}
+
 function PhotoFrame({
   photo,
   className,

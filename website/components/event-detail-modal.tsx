@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
-import type { EventItem } from "@/data/events";
+import type { EventItem, EventRecap } from "@/data/events";
 
 export function EventDetailModal({ events }: { events: EventItem[] }) {
   const params = useSearchParams();
@@ -60,7 +60,7 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
     <dialog
       ref={dialogRef}
       aria-labelledby="event-dialog-title"
-      className="m-auto max-h-[min(90vh,40rem)] w-[min(44rem,calc(100%-2rem))] rounded-sm border border-ink/10 bg-paper p-0 text-ink backdrop:bg-ink/50"
+      className="event-dialog m-auto max-h-[min(92vh,52rem)] w-[min(60rem,calc(100%-1.5rem))] overflow-hidden rounded-md border border-ink/10 bg-paper p-0 text-ink shadow-[0_32px_80px_-24px_rgb(38_49_53/0.45)] backdrop:bg-ink/55 backdrop:backdrop-blur-[2px]"
       onClose={() => {
         if (closedByUrl.current) {
           closedByUrl.current = false;
@@ -73,55 +73,161 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
       }}
     >
       {event ? (
-        <div className="max-h-[min(90vh,40rem)] overflow-y-auto p-6 md:p-8">
-          <div className="flex items-start justify-between gap-6">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">{event.dateLabel}</p>
-              <h2
-                id="event-dialog-title"
-                className="mt-3 text-3xl font-semibold leading-[1.12] tracking-[-0.045em] text-ink"
+        <div className="flex max-h-[min(92vh,52rem)] flex-col">
+          <header className="flex items-center justify-between gap-4 border-b border-ink/10 px-5 py-3 md:px-8">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium tracking-[-0.01em] ${
+                  event.recap ? "bg-ink text-cream" : "bg-cream text-ink"
+                }`}
               >
-                {event.title}
-              </h2>
-              {event.timeLabel ? (
-                <p className="mt-3 text-sm font-medium tracking-[-0.02em] text-pine">{event.timeLabel}</p>
+                {event.recap ? null : <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-sage" />}
+                {event.recap ? "Event Recap" : "Upcoming"}
+              </span>
+              {event.category ? (
+                <span className="rounded-full border border-ink/15 px-2.5 py-1 text-xs font-medium tracking-[-0.01em] text-pine">
+                  {event.category}
+                </span>
               ) : null}
-              {event.location ? <p className="mt-1 text-sm text-pine">{event.location}</p> : null}
             </div>
             <button
               type="button"
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-ink/15 text-ink"
+              className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink transition-colors duration-200 hover:bg-cream"
               aria-label="Close"
               onClick={() => dialogRef.current?.close()}
             >
               <svg aria-hidden width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M3.5 3.5 12.5 12.5M12.5 3.5 3.5 12.5" stroke="currentColor" strokeWidth="1.25" />
+                <path d="M3.5 3.5 12.5 12.5M12.5 3.5 3.5 12.5" stroke="currentColor" strokeWidth="1.5" />
               </svg>
             </button>
-          </div>
-          {event.imageSrc ? (
-            <div className="relative mx-auto mt-6 aspect-[3/4] w-full max-w-xs bg-paper">
-              <Image
-                src={event.imageSrc}
-                alt={event.imageAlt ?? ""}
-                fill
-                sizes="20rem"
-                className="object-contain"
-                quality={90}
-              />
+          </header>
+
+          <div className="overflow-y-auto overscroll-contain">
+            <div className="grid gap-6 p-5 md:grid-cols-[17rem_1fr] md:gap-10 md:p-8">
+              {event.imageSrc ? (
+                <div className="relative mx-auto aspect-[3/4] w-full max-w-[15rem] overflow-hidden rounded-sm bg-cream md:mx-0 md:max-w-none md:self-start">
+                  <Image
+                    src={event.imageSrc}
+                    alt={event.imageAlt ?? ""}
+                    fill
+                    sizes="(min-width: 768px) 17rem, 15rem"
+                    className="object-contain"
+                    quality={90}
+                  />
+                </div>
+              ) : null}
+              <div className={event.imageSrc ? undefined : "md:col-span-2"}>
+                <h2
+                  id="event-dialog-title"
+                  className="text-pretty text-3xl font-semibold leading-[1.1] tracking-[-0.045em] text-ink md:text-4xl"
+                >
+                  {event.title}
+                </h2>
+                <dl className="mt-5 grid gap-px overflow-hidden rounded-sm border border-ink/10 bg-ink/10 sm:grid-cols-2">
+                  <Fact label="Date" value={event.dateLabel} />
+                  <Fact label="Time" value={event.timeLabel ?? "To be announced"} />
+                  {event.location ? (
+                    <Fact label="Location" value={event.location} detail={event.address} wide />
+                  ) : null}
+                </dl>
+                <h3 className="mt-7 text-sm font-semibold tracking-[0.06em] text-ink uppercase">
+                  About this event
+                </h3>
+                <p className="mt-2 text-base leading-7 text-pine">{event.summary}</p>
+                {event.registrationHref ? (
+                  <a
+                    href={event.registrationHref}
+                    className="mt-6 inline-flex min-h-11 items-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
+                  >
+                    Register
+                  </a>
+                ) : null}
+              </div>
             </div>
-          ) : null}
-          <p className="mt-6 text-base leading-7 text-pine">{event.summary}</p>
-          {event.registrationHref ? (
-            <a
-              href={event.registrationHref}
-              className="mt-6 inline-flex min-h-11 items-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
+
+            <section
+              aria-labelledby="event-recap-title"
+              className="border-t border-ink/10 bg-cream/50 px-5 py-8 md:px-8 md:py-10"
             >
-              Register
-            </a>
-          ) : null}
+              <div className="mx-auto max-w-2xl">
+                <p className="font-serif text-xl italic leading-none text-pine">Event Recap</p>
+                <h3
+                  id="event-recap-title"
+                  className="mt-2 text-2xl font-semibold leading-[1.15] tracking-[-0.04em] text-ink"
+                >
+                  {event.recap ? "What happened" : "Recap coming soon"}
+                </h3>
+                {event.recap ? (
+                  <Recap recap={event.recap} />
+                ) : (
+                  <p className="mt-3 text-base leading-7 text-pine">
+                    After the event, we&apos;ll post a full write-up here: the key takeaways, what
+                    our speakers shared, and highlights from the conversation.
+                  </p>
+                )}
+              </div>
+            </section>
+          </div>
         </div>
       ) : null}
     </dialog>
+  );
+}
+
+function Fact({
+  label,
+  value,
+  detail,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  detail?: string;
+  wide?: boolean;
+}) {
+  return (
+    <div className={`bg-paper px-4 py-3 ${wide ? "sm:col-span-2" : ""}`}>
+      <dt className="text-xs font-medium tracking-[0.06em] text-pine uppercase">{label}</dt>
+      <dd className="mt-1 text-base font-medium tracking-[-0.03em] text-ink">{value}</dd>
+      {detail ? <dd className="mt-0.5 text-sm text-pine">{detail}</dd> : null}
+    </div>
+  );
+}
+
+function Recap({ recap }: { recap: EventRecap }) {
+  return (
+    <div className="mt-4">
+      {recap.intro ? <p className="text-lg leading-8 text-ink">{recap.intro}</p> : null}
+      {recap.takeaways?.length ? (
+        <div className="mt-6 rounded-sm border border-ink/10 bg-paper p-5">
+          <h4 className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">Key takeaways</h4>
+          <ol className="mt-3 grid gap-3">
+            {recap.takeaways.map((item, index) => (
+              <li key={item} className="flex gap-3 text-base leading-7 text-pine">
+                <span className="font-serif text-lg italic leading-7 text-ink">{index + 1}.</span>
+                {item}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+      {recap.sections.map((section) => (
+        <div key={section.heading} className="mt-8">
+          <h4 className="text-xl font-semibold tracking-[-0.035em] text-ink">{section.heading}</h4>
+          {section.paragraphs?.map((paragraph) => (
+            <p key={paragraph} className="mt-3 text-base leading-7 text-pine">
+              {paragraph}
+            </p>
+          ))}
+          {section.points?.length ? (
+            <ul className="mt-3 grid list-disc gap-2 pl-5 text-base leading-7 text-pine marker:text-sage">
+              {section.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ))}
+    </div>
   );
 }

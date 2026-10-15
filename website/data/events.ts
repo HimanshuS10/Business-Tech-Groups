@@ -8,12 +8,30 @@ export type EventItem = {
   /** Short homepage card copy. */
   preview?: string;
   category?: string;
-  /** Omit until a venue is confirmed for this BTG event. */
+  /** Short venue shown on cards, e.g. "MAC 313". Omit until confirmed. */
   location?: string;
+  /** Fuller address shown under the venue in the detail dialog. */
+  address?: string;
   imageSrc?: string;
   imageAlt?: string;
   /** Set when BTG publishes a real registration page. Hidden until then. */
   registrationHref?: string;
+  /** Post-event write-up shown in the detail dialog. Add once the event has happened. */
+  recap?: EventRecap;
+};
+
+/**
+ * Blog-style event write-up. Each section renders as a heading followed by
+ * paragraphs and an optional bullet list, in order.
+ */
+export type EventRecap = {
+  intro?: string;
+  takeaways?: string[];
+  sections: {
+    heading: string;
+    paragraphs?: string[];
+    points?: string[];
+  }[];
 };
 
 /**
@@ -27,6 +45,8 @@ export const upcomingEvents: EventItem[] = [
     dateLabel: "October 20, 2026",
     timeLabel: "6:00–8:00 PM",
     category: "Industry & Networking",
+    location: "MAC 313",
+    address: "University of Guelph",
     preview:
       "Hear from Western Financial Group about career opportunities, technology in business, and industry networking.",
     summary:
@@ -40,6 +60,8 @@ export const upcomingEvents: EventItem[] = [
     dateLabel: "October 25, 2026",
     timeLabel: "10:00 AM–12:00 PM",
     category: "Community",
+    location: "The Arboretum",
+    address: "University of Guelph, 200 Arboretum Road, Guelph, ON N1G 2W1",
     preview:
       "Join BTG for a 5K run supporting the Canadian Cancer Society. All running abilities are welcome.",
     summary:
@@ -52,11 +74,11 @@ export const upcomingEvents: EventItem[] = [
     title: "Prompt & Pitch",
     dateLabel: "November 21, 2026",
     timeLabel: null,
-    category: "AI & Innovation",
+    category: "Case Competition",
     preview:
-      "An AI-assisted business competition where student teams develop solutions and pitch them to industry judges.",
+      "A vibe coding case competition: student teams build software with AI, then pitch it to industry judges.",
     summary:
-      "BTG's upcoming AI-assisted business competition challenges student teams to identify a business problem, develop a working prototype, and pitch their solution to industry judges.",
+      "Prompt & Pitch is BTG's vibe coding case competition. Student teams use AI to build their own software, then pitch it to a panel of industry judges. More details will be shared closer to the event.",
   },
 ];
 
