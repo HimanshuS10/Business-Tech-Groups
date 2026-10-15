@@ -104,13 +104,13 @@ function EventListing({ event }: { event: EventItem }) {
       className={`${eventCardSurface} grid scroll-mt-28 md:grid-cols-12`}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-cream md:col-span-5 md:aspect-auto md:h-full md:min-h-64">
-        {event.imageSrc ? (
+        {event.listImageSrc || event.imageSrc ? (
           <Image
-            src={event.imageSrc}
+            src={(event.listImageSrc ?? event.imageSrc)!}
             alt={event.imageAlt ?? ""}
             fill
             sizes="(min-width: 768px) 28rem, 100vw"
-            className={eventCardImage}
+            className={event.listImageSrc ? "object-cover" : eventCardImage}
             quality={90}
           />
         ) : (

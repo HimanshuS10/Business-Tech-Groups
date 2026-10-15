@@ -13,6 +13,7 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
   const closedByUrl = useRef(false);
   const slug = params.get("event");
   const event = slug ? events.find((item) => item.id === slug) : undefined;
+  const poster = event?.posterSrc ?? event?.imageSrc;
 
   const clearEventParam = useCallback(() => {
     const next = new URLSearchParams(params.toString());
@@ -104,10 +105,10 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
 
           <div className="overflow-y-auto overscroll-contain">
             <div className="grid gap-6 p-5 md:grid-cols-[17rem_1fr] md:gap-10 md:p-8">
-              {event.imageSrc ? (
+              {poster ? (
                 <div className="relative mx-auto aspect-[3/4] w-full max-w-[15rem] overflow-hidden rounded-sm bg-cream md:mx-0 md:max-w-none md:self-start">
                   <Image
-                    src={event.imageSrc}
+                    src={poster}
                     alt={event.imageAlt ?? ""}
                     fill
                     sizes="(min-width: 768px) 17rem, 15rem"
@@ -116,7 +117,7 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
                   />
                 </div>
               ) : null}
-              <div className={event.imageSrc ? undefined : "md:col-span-2"}>
+              <div className={poster ? undefined : "md:col-span-2"}>
                 <h2
                   id="event-dialog-title"
                   className="text-pretty text-3xl font-semibold leading-[1.1] tracking-[-0.045em] text-ink md:text-4xl"

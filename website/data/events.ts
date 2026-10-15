@@ -8,11 +8,20 @@ export type EventItem = {
   /** Short homepage card copy. */
   preview?: string;
   category?: string;
-  /** Short venue shown on cards, e.g. "MAC 313". Omit until confirmed. */
+  /** Short venue shown on cards, e.g. "McKinnon 313". Omit until confirmed. */
   location?: string;
   /** Fuller address shown under the venue in the detail dialog. */
   address?: string;
+  /** Homepage card image, 16:9 (e.g. 1920x1080). */
   imageSrc?: string;
+  /**
+   * Events page card image, roughly square (e.g. 1200x1200). The box changes
+   * shape with screen width and crops to fill, so keep content centred with
+   * margin. Falls back to imageSrc.
+   */
+  listImageSrc?: string;
+  /** Vertical poster for the detail dialog, 3:4 (e.g. 1080x1440). Falls back to imageSrc. */
+  posterSrc?: string;
   imageAlt?: string;
   /** Set when BTG publishes a real registration page. Hidden until then. */
   registrationHref?: string;
@@ -45,14 +54,16 @@ export const upcomingEvents: EventItem[] = [
     dateLabel: "October 20, 2026",
     timeLabel: "6:00–8:00 PM",
     category: "Industry & Networking",
-    location: "MAC 313",
+    location: "McKinnon 313",
     address: "University of Guelph",
     preview:
       "Hear from Western Financial Group about career opportunities, technology in business, and industry networking.",
     summary:
       "An employee from Western Financial Group will discuss the company, co-op opportunities, and how it uses technology. Networking will follow.",
-    imageSrc: "/images/events/industry-decoded.png",
-    imageAlt: "Poster for Industry Decoded with Western Financial Group on October 20, 2026",
+    imageSrc: "/images/events/western-financial-card.jpg",
+    listImageSrc: "/images/events/western-financial-square.jpg",
+    posterSrc: "/images/events/western-financial-poster.jpg",
+    imageAlt: "Industry Decoded with Western Financial Group",
   },
   {
     id: "charity-5k",
@@ -66,8 +77,10 @@ export const upcomingEvents: EventItem[] = [
       "Join BTG for a 5K run supporting the Canadian Cancer Society. All running abilities are welcome.",
     summary:
       "Join BTG for a 5K run supporting the Canadian Cancer Society. All running abilities are welcome.",
-    imageSrc: "/images/events/charity-5k.png",
-    imageAlt: "Poster for the Charity 5K Run on October 25, 2026",
+    imageSrc: "/images/events/charity-5k-card.jpg",
+    listImageSrc: "/images/events/charity-5k-square.jpg",
+    posterSrc: "/images/events/charity-5k-poster.jpg",
+    imageAlt: "5K for Charity",
   },
   {
     id: "prompt-and-pitch",
