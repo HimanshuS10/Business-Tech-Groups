@@ -138,6 +138,8 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
                 {event.registrationHref ? (
                   <a
                     href={event.registrationHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="mt-6 inline-flex min-h-11 items-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
                   >
                     Register

@@ -43,11 +43,7 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
 
 function HomeEventCard({ event }: { event: EventItem }) {
   return (
-    <Link
-      href={`/events?event=${event.id}`}
-      aria-label={`${eventCtaLabel(event)}: ${event.title}`}
-      className={`${eventCardSurface} flex h-full flex-col`}
-    >
+    <article className={`${eventCardSurface} relative flex h-full flex-col`}>
       <div className="relative aspect-video overflow-hidden bg-cream">
         {event.imageSrc ? (
           <Image
@@ -61,7 +57,7 @@ function HomeEventCard({ event }: { event: EventItem }) {
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-pine">
             <PhotoMark />
-            <span className="text-sm tracking-[-0.02em]">Event photo</span>
+            <span className="text-sm tracking-[-0.02em]">Coming soon</span>
           </div>
         )}
       </div>
@@ -72,11 +68,33 @@ function HomeEventCard({ event }: { event: EventItem }) {
         <EventMeta event={event} className="mt-2" />
         <p className="mt-3 text-sm leading-relaxed text-pine">{event.preview ?? event.summary}</p>
         <div className="mt-auto pt-6">
-          <div className="flex items-center justify-end border-t border-ink/10 pt-4">
-            <EventCardCta event={event} />
+          <div
+            className={`flex items-center gap-4 border-t border-ink/10 pt-4 ${
+              event.registrationHref ? "justify-between" : "justify-end"
+            }`}
+          >
+            {event.registrationHref ? (
+              // Sits above the stretched card link so it stays separately clickable.
+              <a
+                href={event.registrationHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Register: ${event.title}`}
+                className="relative z-10 inline-flex min-h-9 items-center bg-ink px-4 text-sm font-medium tracking-[-0.03em] text-cream"
+              >
+                Register
+              </a>
+            ) : null}
+            <Link
+              href={`/events?event=${event.id}`}
+              aria-label={`${eventCtaLabel(event)}: ${event.title}`}
+              className="after:absolute after:inset-0"
+            >
+              <EventCardCta event={event} />
+            </Link>
           </div>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }

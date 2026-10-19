@@ -64,6 +64,8 @@ export const upcomingEvents: EventItem[] = [
     listImageSrc: "/images/events/western-financial-square.jpg",
     posterSrc: "/images/events/western-financial-poster.jpg",
     imageAlt: "Industry Decoded with Western Financial Group",
+    registrationHref:
+      "https://docs.google.com/forms/d/e/1FAIpQLSdjxvPztB_aAzgdnzqF9DA105ldN9lN4vqL7w7rGZnrsPEZ4A/viewform",
   },
   {
     id: "charity-5k",
@@ -80,6 +82,7 @@ export const upcomingEvents: EventItem[] = [
     imageSrc: "/images/events/charity-5k-card.jpg",
     listImageSrc: "/images/events/charity-5k-square.jpg",
     posterSrc: "/images/events/charity-5k-poster.jpg",
+    registrationHref: "https://www.eventbrite.com/e/charity-5k-event-tickets-2002826360559",
     imageAlt: "5K for Charity",
   },
   {

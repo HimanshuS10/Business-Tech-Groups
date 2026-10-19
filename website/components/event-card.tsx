@@ -116,6 +116,7 @@ function EventListing({ event }: { event: EventItem }) {
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-pine">
             <PhotoMark />
+            <span className="text-sm tracking-[-0.02em]">Coming soon</span>
           </div>
         )}
       </div>
