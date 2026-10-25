@@ -103,7 +103,11 @@ function EventListing({ event }: { event: EventItem }) {
       aria-label={`${eventCtaLabel(event)}: ${event.title}`}
       className={`${eventCardSurface} grid scroll-mt-28 md:grid-cols-12`}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-cream md:col-span-5 md:aspect-auto md:h-full md:min-h-64">
+      <div
+        className={`relative aspect-[16/10] overflow-hidden md:col-span-5 md:aspect-auto md:h-full md:min-h-64 ${
+          event.imageOnWhite ? "bg-white" : "bg-cream"
+        }`}
+      >
         {event.listImageSrc || event.imageSrc ? (
           <Image
             src={(event.listImageSrc ?? event.imageSrc)!}

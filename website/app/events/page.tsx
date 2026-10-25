@@ -52,7 +52,8 @@ function EventsHeroPhoto({
 }
 
 export default function EventsPage() {
-  const debut = pastEvents[0];
+  const debut = pastEvents.find((event) => event.id === "smarter-than-ai");
+  const recentPastEvents = pastEvents.filter((event) => event !== debut);
 
   return (
     <>
@@ -94,12 +95,20 @@ export default function EventsPage() {
               More events coming soon.
             </p>
           </div>
+          {recentPastEvents.length ? (
+            <div className="mt-14 md:mt-16">
+              <h2 className={sectionTitle}>Past Events</h2>
+              <div className="mt-8 md:mt-10">
+                <EventList events={recentPastEvents} />
+              </div>
+            </div>
+          ) : null}
         </Container>
       </section>
 
       <section className="bg-cream">
         <Container className="py-14 md:py-16 lg:py-[4.5rem]">
-          <p className={eyebrow}>Past Events</p>
+          <p className={eyebrow}>Where It Started</p>
           <h2 className={`${sectionTitle} max-w-md`}>A look back at BTG.</h2>
           {debut ? (
             <article

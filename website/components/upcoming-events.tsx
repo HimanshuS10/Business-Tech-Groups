@@ -44,7 +44,7 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
 function HomeEventCard({ event }: { event: EventItem }) {
   return (
     <article className={`${eventCardSurface} relative flex h-full flex-col`}>
-      <div className="relative aspect-video overflow-hidden bg-cream">
+      <div className={`relative aspect-video overflow-hidden ${event.imageOnWhite ? "bg-white" : "bg-cream"}`}>
         {event.imageSrc ? (
           <Image
             src={event.imageSrc}
