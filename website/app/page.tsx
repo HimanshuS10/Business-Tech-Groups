@@ -1,4 +1,5 @@
 import { AboutPreview } from "@/components/about-preview";
+import { JsonLd } from "@/components/json-ld";
 import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { UpcomingEvents } from "@/components/upcoming-events";
@@ -9,18 +10,23 @@ import { eyebrow, sectionTitle } from "@/components/type";
 import { faqs } from "@/data/faq";
 import { upcomingEvents } from "@/data/events";
 import { club } from "@/data/site";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
+import { faqGraph } from "@/lib/structured-data";
+import { siteOrigin } from "@/lib/site-url";
 
 export const metadata = pageMetadata({
   title: "Business Technologies Guelph | Where Business Meets Tech",
   description:
     "Discover Business Technologies Guelph (BTG), a student-led organization connecting University of Guelph students with emerging technology, industry professionals, and practical experiences.",
   path: "/",
+  socialDescription: socialShare.home.description,
+  image: socialShare.home,
 });
 
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={faqGraph(siteOrigin()?.origin ?? null, faqs)} />
       <section className="on-ink bg-ink text-cream">
         <Container className="grid items-center gap-10 py-12 md:py-14 lg:min-h-[calc(86vh-4.5rem)] lg:grid-cols-12 lg:gap-14 lg:py-12">
           <div className="lg:col-span-6">

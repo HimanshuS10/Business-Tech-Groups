@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { shareSize, socialTitle } from "@/lib/social";
 import { indexingEnabled, siteOrigin } from "@/lib/site-url";
+
+export { socialShare, socialTitle, socialWordCount } from "@/lib/social";
 
 export const shareImage = {
   path: "/og",
@@ -8,10 +11,16 @@ export const shareImage = {
   alt: "Business Technologies Guelph — Where Business Meets Tech",
 } as const;
 
-export function pageMetadata(input: { title: string; description: string; path: string }): Metadata {
+export function pageMetadata(input: {
+  title: string;
+  description: string;
+  path: string;
+  socialDescription: string;
+  image: { path: string; alt: string };
+}): Metadata {
   const origin = siteOrigin();
   const canonical = origin ? new URL(input.path, origin).toString() : undefined;
-  const imageUrl = origin ? new URL(shareImage.path, origin).toString() : undefined;
+  const imageUrl = origin ? new URL(input.image.path, origin).toString() : undefined;
   const robots = indexingEnabled()
     ? { index: true, follow: true }
     : { index: false, follow: false };
@@ -22,21 +31,21 @@ export function pageMetadata(input: { title: string; description: string; path: 
     alternates: canonical ? { canonical } : undefined,
     robots,
     openGraph: {
-      title: input.title,
-      description: input.description,
+      title: socialTitle,
+      description: input.socialDescription,
       url: canonical,
-      siteName: "Business Technologies Guelph",
+      siteName: socialTitle,
       locale: "en_CA",
       type: "website",
       images: imageUrl
-        ? [{ url: imageUrl, width: shareImage.width, height: shareImage.height, alt: shareImage.alt }]
+        ? [{ url: imageUrl, width: shareSize.width, height: shareSize.height, alt: input.image.alt }]
         : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: input.title,
-      description: input.description,
-      images: imageUrl ? [imageUrl] : undefined,
+      title: socialTitle,
+      description: input.socialDescription,
+      images: imageUrl ? [{ url: imageUrl, alt: input.image.alt }] : undefined,
     },
   };
 }

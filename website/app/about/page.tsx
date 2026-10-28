@@ -3,13 +3,15 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { eyebrow, sectionTitle } from "@/components/type";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "About BTG | Business Technologies Guelph",
   description:
     "Learn about Business Technologies Guelph, our mission, vision, and commitment to connecting business, technology, and student innovation at the University of Guelph.",
   path: "/about",
+  socialDescription: socialShare.about.description,
+  image: socialShare.about,
 });
 
 /** Set `src` when an approved event photo is ready. Crop uses object-cover. */

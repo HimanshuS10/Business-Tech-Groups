@@ -2,13 +2,15 @@ import Image from "next/image";
 import { buttonClasses } from "@/components/button-link";
 import { Container } from "@/components/container";
 import { eyebrow, sectionTitle, sectionY } from "@/components/type";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Partner With Us | Business Technologies Guelph",
   description:
     "Explore sponsorships, industry collaborations, and partnership opportunities with Business Technologies Guelph at the University of Guelph.",
   path: "/partner",
+  socialDescription: socialShare.partner.description,
+  image: socialShare.partner,
 });
 
 /** The one partnership action on this page. Every button points here. */

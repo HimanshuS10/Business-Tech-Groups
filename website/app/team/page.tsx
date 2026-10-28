@@ -1,11 +1,13 @@
 import { Container } from "@/components/container";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Our Team | Business Technologies Guelph",
   description:
     "Meet the student leadership behind Business Technologies Guelph. Our full team is coming soon.",
   path: "/team",
+  socialDescription: socialShare.team.description,
+  image: socialShare.team,
 });
 
 export default function TeamPage() {
