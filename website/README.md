@@ -34,7 +34,7 @@ Use port 3001. Port 3000 is reserved for another local project.
 
 Do not deploy from this handoff until the executive team approves it.
 
-1. Set `NEXT_PUBLIC_SITE_URL` to the confirmed public origin, including `https://`. Do not use localhost. Canonical links, `sitemap.xml`, and the Open Graph image URL are omitted until this is set, so a build cannot advertise `localhost`.
+1. Set `NEXT_PUBLIC_SITE_URL=https://businesstechguelph.ca` in the production environment. Do not use localhost. Canonical links, `sitemap.xml`, and the Open Graph image URL are omitted until this is set, so a build cannot advertise `localhost`.
 2. Indexing stays off unless the deploy is production. Vercel preview (`VERCEL_ENV=preview`) is always `noindex` and `robots.txt` disallows `/`. Vercel production is indexed only after the site URL is set. A non-Vercel host must also set `BTG_INDEXING=production` on that host only.
 3. The share image is generated at `/og` (1200×630) from the official seal. It is referenced in page metadata only after `NEXT_PUBLIC_SITE_URL` is set.
 4. Contact delivery is intentionally off (`contactSubmissionEnabled` in `lib/contact-fields.ts`). To turn it on later: set that flag to `true`, then provide `RESEND_API_KEY`, `BTG_CONTACT_TO_EMAIL`, `BTG_CONTACT_FROM_EMAIL`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN`. Do not point the inbox at a personal address until BTG approves it.

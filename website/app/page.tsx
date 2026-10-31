@@ -4,6 +4,7 @@ import { Container } from "@/components/container";
 import { UpcomingEvents } from "@/components/upcoming-events";
 import { FaqList } from "@/components/faq-list";
 import { HeroMosaic } from "@/components/hero-photos";
+import { Spotlight } from "@/components/motion";
 import { PartnershipsPreview } from "@/components/partnerships-preview";
 import { eyebrow, sectionTitle } from "@/components/type";
 import { faqs } from "@/data/faq";
@@ -21,16 +22,18 @@ export const metadata = pageMetadata({
 export default function HomePage() {
   return (
     <>
-      <section className="on-ink bg-ink text-cream">
-        <Container className="grid items-center gap-10 py-12 md:py-14 lg:min-h-[calc(86vh-4.5rem)] lg:grid-cols-12 lg:gap-14 lg:py-12">
+      <section className="on-ink relative overflow-hidden bg-ink text-cream">
+        <Spotlight />
+        <Container className="relative grid items-center gap-10 py-12 md:py-14 lg:min-h-[calc(86vh-4.5rem)] lg:grid-cols-12 lg:gap-14 lg:py-12">
           <div className="lg:col-span-6">
-            <p className="font-serif text-xl italic text-cream/80 md:text-2xl">
+            <p className="hero-rise font-serif text-xl italic text-cream/80 md:text-2xl">
               {club.university}
             </p>
             <h1 className="mt-4 text-5xl leading-[0.95] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-              Where Business
+              <span className="hero-word [animation-delay:100ms]">Where</span>{" "}
+              <span className="hero-word [animation-delay:200ms]">Business</span>
               <span className="mt-1 block font-serif text-[1.05em] font-normal tracking-normal italic">
-                <span className="relative inline-block">
+                <span className="hero-word relative [animation-delay:340ms]">
                   Meets Tech
                   <svg
                     aria-hidden
@@ -61,12 +64,12 @@ export default function HomePage() {
                 </span>
               </span>
             </h1>
-            <p className="mt-6 max-w-md text-base leading-7 text-cream/80 md:text-lg md:leading-8">
+            <p className="hero-rise mt-6 max-w-md text-base [animation-delay:500ms] leading-7 text-cream/80 md:text-lg md:leading-8">
               Connecting ambitious students with industry professionals through
               hands-on experiences at the intersection of business and emerging
               technology.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <div className="hero-rise mt-8 flex flex-col gap-3 [animation-delay:620ms] sm:flex-row sm:gap-4">
               <ButtonLink href="/about" variant="inverse">
                 Explore BTG
               </ButtonLink>
@@ -110,14 +113,14 @@ export default function HomePage() {
 
       <section className="bg-paper">
         <Container className="grid items-start gap-8 py-14 md:py-16 lg:grid-cols-12 lg:gap-16 lg:py-20">
-          <div className="lg:col-span-5">
+          <div data-reveal className="lg:col-span-5">
             <p className={eyebrow}>Questions</p>
             <h2 className={sectionTitle}>A few things worth knowing.</h2>
             <p className="mt-4 max-w-sm text-base leading-7 text-pine">
               Find out more about events, getting involved, and connecting with BTG.
             </p>
           </div>
-          <div className="lg:col-span-7">
+          <div data-reveal className="delay-150 lg:col-span-7">
             <FaqList items={faqs} />
           </div>
         </Container>

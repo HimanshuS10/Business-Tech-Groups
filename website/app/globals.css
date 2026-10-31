@@ -61,11 +61,11 @@ body {
 .hero-underline {
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
-  animation: hero-underline-draw 700ms cubic-bezier(0.65, 0, 0.35, 1) 300ms both;
+  animation: hero-underline-draw 700ms cubic-bezier(0.65, 0, 0.35, 1) 850ms both;
 }
 
 .hero-underline-second {
-  animation-delay: 750ms;
+  animation-delay: 1250ms;
 }
 
 @keyframes hero-underline-draw {
@@ -92,6 +92,69 @@ body {
     opacity: 1;
     transform: translateY(-6px);
   }
+}
+
+/* Home hero entrance: words blur in, then the copy and photos rise. */
+.hero-word {
+  display: inline-block;
+  animation: hero-word-in 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.hero-rise {
+  animation: hero-rise-in 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.hero-photo {
+  animation: hero-photo-in 1000ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes hero-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    filter: blur(10px);
+  }
+}
+
+@keyframes hero-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes hero-photo-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+    filter: blur(6px);
+  }
+}
+
+/* Cursor-following glow; positioned by <Spotlight />. */
+.spotlight {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    560px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgb(159 196 168 / 0.16),
+    transparent 65%
+  );
+  transition: opacity 500ms ease;
+}
+
+/* Scroll reveal: only hidden once <ScrollReveal /> is running. */
+[data-reveal] {
+  transition:
+    opacity 800ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal-ready [data-reveal]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(28px);
 }
 
 summary {

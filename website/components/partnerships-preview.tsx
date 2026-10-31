@@ -12,7 +12,7 @@ export function PartnershipsPreview() {
     <section className="bg-cream">
       <Container className="py-14 md:py-16 lg:py-20">
         <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
+          <div data-reveal>
             <p className="text-sm font-medium tracking-[-0.03em] text-pine">Partner With BTG</p>
             <h2 className="mt-3 max-w-lg text-3xl font-medium leading-[1.08] tracking-[-0.05em] text-ink md:text-[2.75rem]">
               Connect with the next generation of{" "}
@@ -24,7 +24,7 @@ export function PartnershipsPreview() {
               Explore Partnerships
             </ButtonLink>
           </div>
-          <div>
+          <div data-reveal className="delay-150">
             <p className="max-w-md text-base leading-7 text-pine">
               Work with BTG to connect with ambitious University of Guelph students
               through industry events, hands-on workshops, and meaningful collaborations.

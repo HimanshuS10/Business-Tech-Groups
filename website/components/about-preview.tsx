@@ -1,5 +1,8 @@
 import { ButtonLink } from "@/components/button-link";
 import { Container } from "@/components/container";
+import { CountUp } from "@/components/motion";
+import { pastEvents } from "@/data/events";
+import { verifiedImpact } from "@/data/site";
 
 const pillars = [
   {
@@ -22,11 +25,17 @@ const pillars = [
   },
 ] as const;
 
+const stats = [
+  { value: "150+", label: "People at our events" },
+  { value: verifiedImpact[1].value, label: verifiedImpact[1].label },
+  { value: String(pastEvents.length), label: "Events hosted" },
+];
+
 export function AboutPreview() {
   return (
     <section className="bg-cream">
       <Container className="py-14 md:py-16">
-        <div>
+        <div data-reveal>
           <p className="text-sm font-medium tracking-[-0.03em] text-pine">About BTG</p>
           <h2 className="mt-3 max-w-md text-3xl font-medium leading-[1.08] tracking-[-0.05em] text-ink md:text-[2.75rem]">
             Where ideas meet{" "}
@@ -35,8 +44,8 @@ export function AboutPreview() {
         </div>
 
         <ul className="mt-8 grid gap-4 sm:gap-5 md:grid-cols-3">
-          {pillars.map((pillar) => (
-            <li key={pillar.title}>
+          {pillars.map((pillar, index) => (
+            <li key={pillar.title} data-reveal style={{ transitionDelay: `${index * 110}ms` }}>
               <article
                 className={`flex flex-col justify-between rounded-md p-5 md:h-[240px] md:p-6 lg:h-[260px] ${pillar.surface}`}
               >
@@ -52,7 +61,19 @@ export function AboutPreview() {
           ))}
         </ul>
 
-        <ButtonLink href="/about" className="mt-6 gap-2">
+        <dl data-reveal className="mt-10 grid grid-cols-3 gap-4 border-t border-ink/15 pt-8">
+          {stats.map((stat) => (
+            <div key={stat.label}>
+              <dt className="sr-only">{stat.label}</dt>
+              <dd className="text-4xl font-semibold tracking-[-0.05em] text-ink md:text-6xl">
+                <CountUp value={stat.value} />
+              </dd>
+              <dd className="mt-2 text-sm leading-snug text-pine">{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <ButtonLink href="/about" className="mt-8 gap-2">
           Learn More About BTG
           <svg aria-hidden width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path
