@@ -4,6 +4,7 @@ import { Instrument_Serif, Inter } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { ScrollReveal } from "@/components/motion";
 import { club } from "@/data/site";
 import { siteGraph } from "@/lib/structured-data";
 import { indexingEnabled, siteOrigin } from "@/lib/site-url";
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <ScrollReveal />
         <Analytics />
       </body>
     </html>

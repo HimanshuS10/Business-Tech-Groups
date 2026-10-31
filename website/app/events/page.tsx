@@ -84,7 +84,7 @@ export default function EventsPage() {
 
       <section id="upcoming-events" className="scroll-mt-28 bg-paper">
         <Container className={sectionY}>
-          <div className="max-w-2xl">
+          <div data-reveal className="max-w-2xl">
             <p className={eyebrow}>What&apos;s Coming Up</p>
             <h2 className={sectionTitle}>Upcoming Events</h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-pine">
@@ -99,7 +99,7 @@ export default function EventsPage() {
           </div>
           {recentPastEvents.length ? (
             <div className="mt-14 md:mt-16">
-              <h2 className={sectionTitle}>Past Events</h2>
+              <h2 data-reveal className={sectionTitle}>Past Events</h2>
               <div className="mt-8 md:mt-10">
                 <EventList events={recentPastEvents} />
               </div>

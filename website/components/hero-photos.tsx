@@ -40,7 +40,12 @@ export function HeroMosaic({
   return (
     <div className="grid aspect-6/5 grid-cols-7 grid-rows-2 gap-3">
       {mosaicFrames.map((frame, index) => (
-        <PhotoFrame key={frame.className + index} photo={photos[index]} {...frame} />
+        <PhotoFrame
+          key={frame.className + index}
+          photo={photos[index]}
+          {...frame}
+          entranceDelay={250 + index * 120}
+        />
       ))}
     </div>
   );
@@ -50,13 +55,19 @@ function PhotoFrame({
   photo,
   className,
   sizes,
+  entranceDelay,
 }: {
   photo: HeroPhoto;
   className: string;
   sizes: string;
+  /** Plays the hero entrance animation after this many milliseconds. */
+  entranceDelay?: number;
 }) {
   return (
-    <div className={`relative overflow-hidden bg-cream ${className}`}>
+    <div
+      className={`group relative overflow-hidden bg-cream ${entranceDelay === undefined ? "" : "hero-photo"} ${className}`}
+      style={entranceDelay === undefined ? undefined : { animationDelay: `${entranceDelay}ms` }}
+    >
       <div aria-hidden className="absolute inset-0 bg-sage/20" />
       {photo.src ? (
         <Image
@@ -65,7 +76,7 @@ function PhotoFrame({
           fill
           priority={photo.priority}
           sizes={sizes}
-          className={`object-cover ${photo.position ?? "object-center"}`}
+          className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${photo.position ?? "object-center"}`}
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-pine">

@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { PhotoRing } from "@/components/photo-ring";
 import type { EventItem, EventRecap } from "@/data/events";
 
 export function EventDetailModal({ events }: { events: EventItem[] }) {
@@ -205,7 +206,7 @@ function Recap({ recap }: { recap: EventRecap }) {
   return (
     <div className="mt-4">
       {recap.intro ? <p className="text-lg leading-8 text-ink">{recap.intro}</p> : null}
-      {recap.photos?.length ? <RecapSlideshow photos={recap.photos} /> : null}
+      {recap.photos?.length ? <PhotoRing photos={recap.photos} /> : null}
       {recap.takeaways?.length ? (
         <div className="mt-6 rounded-sm border border-ink/10 bg-paper p-5">
           <h4 className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">Key takeaways</h4>
@@ -237,85 +238,5 @@ function Recap({ recap }: { recap: EventRecap }) {
         </div>
       ))}
     </div>
-  );
-}
-
-function RecapSlideshow({ photos }: { photos: NonNullable<EventRecap["photos"]> }) {
-  const [index, setIndex] = useState(0);
-  const count = photos.length;
-  const photo = photos[index];
-  const go = (step: number) => setIndex((current) => (current + step + count) % count);
-
-  return (
-    <figure
-      aria-roledescription="carousel"
-      aria-label="Event photos"
-      className="mt-6"
-      onKeyDown={(keyEvent) => {
-        if (keyEvent.key === "ArrowLeft") go(-1);
-        if (keyEvent.key === "ArrowRight") go(1);
-      }}
-    >
-      <div className="relative aspect-[3/2] overflow-hidden rounded-sm bg-ink">
-        <Image
-          key={photo.src}
-          src={photo.src}
-          alt={photo.alt}
-          fill
-          sizes="(min-width: 768px) 42rem, 100vw"
-          className="object-cover"
-          quality={90}
-        />
-        {count > 1 ? (
-          <>
-            <SlideButton direction="previous" onClick={() => go(-1)} />
-            <SlideButton direction="next" onClick={() => go(1)} />
-          </>
-        ) : null}
-        <span className="absolute right-3 bottom-3 rounded-full bg-ink/70 px-2.5 py-1 text-xs font-medium tracking-[-0.01em] text-cream">
-          {index + 1} / {count}
-        </span>
-      </div>
-      {count > 1 ? (
-        <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-          {photos.map((item, itemIndex) => (
-            <button
-              key={item.src}
-              type="button"
-              aria-label={`Show photo ${itemIndex + 1}`}
-              aria-current={itemIndex === index}
-              onClick={() => setIndex(itemIndex)}
-              className={`relative aspect-[3/2] w-20 shrink-0 cursor-pointer overflow-hidden rounded-sm transition-opacity duration-200 ${
-                itemIndex === index ? "ring-2 ring-ink ring-offset-2 ring-offset-cream" : "opacity-60 hover:opacity-100"
-              }`}
-            >
-              <Image src={item.src} alt="" fill sizes="5rem" className="object-cover" />
-            </button>
-          ))}
-        </div>
-      ) : null}
-    </figure>
-  );
-}
-
-function SlideButton({ direction, onClick }: { direction: "previous" | "next"; onClick: () => void }) {
-  const isNext = direction === "next";
-  return (
-    <button
-      type="button"
-      aria-label={isNext ? "Next photo" : "Previous photo"}
-      onClick={onClick}
-      className={`absolute top-1/2 inline-flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/85 text-ink shadow-sm transition-colors duration-200 hover:bg-paper ${
-        isNext ? "right-3" : "left-3"
-      }`}
-    >
-      <svg aria-hidden width="14" height="14" viewBox="0 0 16 16" fill="none">
-        <path
-          d={isNext ? "M6 3.5 10.5 8 6 12.5" : "M10 3.5 5.5 8 10 12.5"}
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-      </svg>
-    </button>
   );
 }
