@@ -2,13 +2,15 @@ import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { Container } from "@/components/container";
 import { sectionTitle } from "@/components/type";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Contact BTG | Business Technologies Guelph",
   description:
     "Connect with Business Technologies Guelph through our official social media channels and learn how to reach our corporate relations team.",
   path: "/contact",
+  socialDescription: socialShare.contact.description,
+  image: socialShare.contact,
 });
 
 export default function ContactPage() {

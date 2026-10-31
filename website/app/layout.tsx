@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Instrument_Serif, Inter } from "next/font/google";
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ScrollReveal } from "@/components/motion";
 import { club } from "@/data/site";
+import { siteGraph } from "@/lib/structured-data";
 import { indexingEnabled, siteOrigin } from "@/lib/site-url";
 import "./globals.css";
 
@@ -48,6 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <JsonLd data={siteGraph(origin?.origin ?? null)} />
         <SiteHeader />
         <main id="content" className="flex-1">
           {children}

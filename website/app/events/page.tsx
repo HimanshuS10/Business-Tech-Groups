@@ -8,13 +8,15 @@ import { PanelistList } from "@/components/panelist-list";
 import { eyebrow, sectionTitle, sectionY } from "@/components/type";
 import { debutPanelists, pastEvents, upcomingEvents } from "@/data/events";
 import { socials, verifiedImpact } from "@/data/site";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Events | Business Technologies Guelph",
   description:
     "Explore events, networking opportunities, industry discussions, and technology-focused experiences organized by Business Technologies Guelph.",
   path: "/events",
+  socialDescription: socialShare.events.description,
+  image: socialShare.events,
 });
 
 /** Set `src` when an approved event photograph is ready. Crop uses object-cover. */
