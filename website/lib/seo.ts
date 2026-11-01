@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { club } from "@/data/site";
 import { shareSize, socialTitle } from "@/lib/social";
 import { indexingEnabled, siteOrigin } from "@/lib/site-url";
 
@@ -34,7 +35,7 @@ export function pageMetadata(input: {
       title: socialTitle,
       description: input.socialDescription,
       url: canonical,
-      siteName: socialTitle,
+      siteName: club.siteName,
       locale: "en_CA",
       type: "website",
       images: imageUrl

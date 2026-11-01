@@ -1,6 +1,8 @@
 export const club = {
   name: "Business Technologies Guelph",
   shortName: "BTG",
+  /** Name Google shows above search results (WebSite structured data and og:site_name). */
+  siteName: "Business Tech Guelph",
   university: "University of Guelph",
   tagline: "Where Business Meets Tech",
   description:

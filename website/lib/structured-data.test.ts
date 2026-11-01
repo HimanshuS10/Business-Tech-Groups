@@ -19,7 +19,8 @@ test("organization data uses the verified club profile", () => {
   assert.equal(JSON.stringify(organizationNode(null)).includes("localhost"), false);
 
   const site = siteGraph(null);
-  assert.equal(site["@graph"][1].name, "Business Technologies Guelph");
+  assert.equal(site["@graph"][1].name, "Business Tech Guelph");
+  assert.deepEqual(site["@graph"][1].alternateName, ["Business Technologies Guelph", "BTG"]);
   const faq = faqGraph(origin, [
     { question: "What kinds of events does BTG organize?", answer: [{ text: "Workshops and panels." }] },
   ]);

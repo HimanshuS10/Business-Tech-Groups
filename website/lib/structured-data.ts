@@ -40,7 +40,8 @@ export function siteGraph(origin: string | null) {
       {
         "@type": "WebSite",
         ...(origin ? { "@id": `${origin}/#website`, url: `${origin}/` } : {}),
-        name: club.name,
+        name: club.siteName,
+        alternateName: [club.name, club.shortName],
         description: club.description,
         inLanguage: "en-CA",
         publisher: origin
