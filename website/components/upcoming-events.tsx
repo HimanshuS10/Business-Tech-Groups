@@ -6,6 +6,7 @@ import { eyebrow, sectionTitle } from "@/components/type";
 import {
   EventCardCta,
   EventMeta,
+  EventRegistrationLink,
   PhotoMark,
   eventCardImage,
   eventCardSurface,
@@ -69,22 +70,11 @@ function HomeEventCard({ event }: { event: EventItem }) {
         <p className="mt-3 text-sm leading-relaxed text-pine">{event.preview ?? event.summary}</p>
         <div className="mt-auto pt-6">
           <div
-            className={`flex items-center gap-4 border-t border-ink/10 pt-4 ${
+            className={`flex flex-wrap items-center gap-4 border-t border-ink/10 pt-4 ${
               event.registrationHref ? "justify-between" : "justify-end"
             }`}
           >
-            {event.registrationHref ? (
-              // Sits above the stretched card link so it stays separately clickable.
-              <a
-                href={event.registrationHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Register: ${event.title}`}
-                className="relative z-10 inline-flex min-h-9 items-center bg-ink px-4 text-sm font-medium tracking-[-0.03em] text-cream"
-              >
-                Register
-              </a>
-            ) : null}
+            <EventRegistrationLink event={event} />
             <Link
               href={`/events?event=${event.id}`}
               aria-label={`${eventCtaLabel(event)}: ${event.title}`}

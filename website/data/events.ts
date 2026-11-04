@@ -27,6 +27,8 @@ export type EventItem = {
   imageOnWhite?: boolean;
   /** Set when BTG publishes a real registration page. Hidden until then. */
   registrationHref?: string;
+  /** Visible label for the registration link. Defaults to "Register". */
+  registrationLabel?: string;
   /** Post-event write-up shown in the detail dialog. Add once the event has happened. */
   recap?: EventRecap;
 };
@@ -48,7 +50,7 @@ export type EventRecap = {
 };
 
 /**
- * Leave venue, registration URL, and time blank until BTG publishes them.
+ * Leave venue and time blank until BTG publishes them.
  * Add imageSrc only for approved photography.
  */
 export const upcomingEvents: EventItem[] = [
@@ -67,6 +69,9 @@ export const upcomingEvents: EventItem[] = [
     posterSrc: "/images/events/google-ai-studio-poster.png",
     imageAlt: "Google AI Studio logo",
     imageOnWhite: true,
+    registrationHref:
+      "https://docs.google.com/forms/d/e/1FAIpQLSd_GMn0P521RLMWyj9lucOvM9eN4bRGz3fJSTcL9SKStU2Lmg/viewform?usp=dialog",
+    registrationLabel: "Register for the Workshop",
   },
   {
     id: "prompt-and-pitch",
