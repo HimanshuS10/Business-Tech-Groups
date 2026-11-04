@@ -76,6 +76,22 @@ export function EventMeta({ event, className = "" }: { event: EventItem; classNa
   );
 }
 
+export function EventRegistrationLink({ event }: { event: EventItem }) {
+  if (!event.registrationHref) return null;
+
+  return (
+    <a
+      href={event.registrationHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative z-10 inline-flex min-h-11 items-center bg-ink px-4 text-sm font-medium tracking-[-0.03em] text-cream"
+    >
+      {event.registrationLabel ?? "Register"}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
 /** Underlined call to action shown at the foot of each event card. */
 export function EventCardCta({ event }: { event: EventItem }) {
   return (
@@ -98,12 +114,9 @@ export function EventCardCta({ event }: { event: EventItem }) {
 
 function EventListing({ event }: { event: EventItem }) {
   return (
-    <Link
+    <article
       id={event.id}
-      href={`/events?event=${event.id}`}
-      scroll={false}
-      aria-label={`${eventCtaLabel(event)}: ${event.title}`}
-      className={`${eventCardSurface} grid scroll-mt-28 md:grid-cols-12`}
+      className={`${eventCardSurface} relative grid scroll-mt-28 md:grid-cols-12`}
     >
       <div
         className={`relative aspect-[16/10] overflow-hidden md:col-span-5 md:aspect-auto md:h-full md:min-h-64 ${
@@ -134,15 +147,25 @@ function EventListing({ event }: { event: EventItem }) {
         <EventMeta event={event} className="mt-3" />
         <p className="mt-4 max-w-xl text-base leading-7 text-pine">{event.preview ?? event.summary}</p>
         <div className="mt-auto pt-8">
-          <div className="flex items-center justify-between gap-4 border-t border-ink/10 pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 pt-5">
             <span className="text-sm text-pine">
               {event.recap ? "Takeaways, highlights, and what we discussed" : "Recap posted after the event"}
             </span>
-            <EventCardCta event={event} />
+            <div className="flex flex-wrap items-center gap-4">
+              <EventRegistrationLink event={event} />
+              <Link
+                href={`/events?event=${event.id}`}
+                scroll={false}
+                aria-label={`${eventCtaLabel(event)}: ${event.title}`}
+                className="after:absolute after:inset-0"
+              >
+                <EventCardCta event={event} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
 
