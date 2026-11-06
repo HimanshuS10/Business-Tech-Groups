@@ -36,8 +36,9 @@ export const metadata: Metadata = {
   robots: indexingEnabled()
     ? { index: true, follow: true }
     : { index: false, follow: false },
+  // The favicon comes from app/favicon.ico (16–256px, includes the 48px
+  // multiples Google wants). Don't add a second rel="icon" here.
   icons: {
-    icon: "/brand/btg-logo.png",
     apple: "/brand/btg-logo.png",
   },
 };
