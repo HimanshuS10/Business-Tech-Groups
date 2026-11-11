@@ -33,6 +33,8 @@ export type EventItem = {
   resources?: EventResource[];
   /** Copy-and-paste prompts shown in the detail dialog, in order. */
   prompts?: EventPrompt[];
+  /** Visible label for the registration link. Defaults to "Register". */
+  registrationLabel?: string;
   /** Post-event write-up shown in the detail dialog. Add once the event has happened. */
   recap?: EventRecap;
 };
@@ -74,7 +76,7 @@ export type EventRecap = {
 };
 
 /**
- * Leave venue, registration URL, and time blank until BTG publishes them.
+ * Leave venue and time blank until BTG publishes them.
  * Add imageSrc only for approved photography.
  */
 export const upcomingEvents: EventItem[] = [
@@ -123,6 +125,9 @@ export const upcomingEvents: EventItem[] = [
       },
     ],
     prompts: aiStudioPrompts,
+    registrationHref:
+      "https://docs.google.com/forms/d/e/1FAIpQLSd_GMn0P521RLMWyj9lucOvM9eN4bRGz3fJSTcL9SKStU2Lmg/viewform?usp=dialog",
+    registrationLabel: "Register for the Workshop",
   },
   {
     id: "prompt-and-pitch",

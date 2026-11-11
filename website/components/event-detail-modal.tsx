@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+// import { useCallback, useEffect, useRef } from "react";
+import { EventRegistrationLink } from "@/components/event-card";
+
+
 import { PhotoRing } from "@/components/photo-ring";
 import type { EventItem, EventPrompt, EventRecap, EventResource } from "@/data/events";
 
@@ -141,14 +145,9 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
                 </h3>
                 <p className="mt-2 text-base leading-7 text-pine">{event.summary}</p>
                 {event.registrationHref ? (
-                  <a
-                    href={event.registrationHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 inline-flex min-h-11 items-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
-                  >
-                    Register
-                  </a>
+                  <div className="mt-6">
+                    <EventRegistrationLink event={event} />
+                  </div>
                 ) : null}
               </div>
             </div>
