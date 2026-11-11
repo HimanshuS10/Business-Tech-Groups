@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PhotoRing } from "@/components/photo-ring";
-import type { EventItem, EventRecap } from "@/data/events";
+import type { EventItem, EventPrompt, EventRecap, EventResource } from "@/data/events";
 
 export function EventDetailModal({ events }: { events: EventItem[] }) {
   const params = useSearchParams();
@@ -153,6 +153,9 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
               </div>
             </div>
 
+            {event.resources?.length ? <Resources resources={event.resources} /> : null}
+            {event.prompts?.length ? <Prompts key={event.id} prompts={event.prompts} /> : null}
+
             <section
               aria-labelledby="event-recap-title"
               className="border-t border-ink/10 bg-cream/50 px-5 py-8 md:px-8 md:py-10"
@@ -199,6 +202,156 @@ function Fact({
       <dd className="mt-1 text-base font-medium tracking-[-0.03em] text-ink">{value}</dd>
       {detail ? <dd className="mt-0.5 text-sm text-pine">{detail}</dd> : null}
     </div>
+  );
+}
+
+const resourceLabels: Record<EventResource["action"], string> = {
+  copy: "Make a copy",
+  download: "Download",
+  open: "Open",
+};
+
+function Resources({ resources }: { resources: EventResource[] }) {
+  return (
+    <section
+      aria-labelledby="event-resources-title"
+      className="border-t border-ink/10 px-5 py-8 md:px-8 md:py-10"
+    >
+      <div className="mx-auto max-w-2xl">
+        <h3
+          id="event-resources-title"
+          className="text-sm font-semibold tracking-[0.06em] text-ink uppercase"
+        >
+          Workshop resources
+        </h3>
+        <p className="mt-2 text-base leading-7 text-pine">
+          Grab these before the event so you&apos;re ready to build.
+        </p>
+        <ul className="mt-5 grid gap-3">
+          {resources.map((resource) => {
+            const external = resource.href.startsWith("http");
+            return (
+              <li
+                key={resource.href}
+                className="flex flex-col gap-4 rounded-sm border border-ink/10 bg-paper p-4 sm:flex-row sm:items-center"
+              >
+                {resource.previewSrc ? (
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-sm border border-ink/10 bg-white">
+                    <Image
+                      src={resource.previewSrc}
+                      alt=""
+                      fill
+                      sizes="4rem"
+                      className="object-contain"
+                    />
+                  </div>
+                ) : null}
+                <div className="min-w-0 flex-1">
+                  <p className="text-base font-medium tracking-[-0.03em] text-ink">{resource.title}</p>
+                  {resource.description ? (
+                    <p className="mt-0.5 text-sm leading-6 text-pine">{resource.description}</p>
+                  ) : null}
+                </div>
+                <a
+                  href={resource.href}
+                  {...(external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : resource.action === "download"
+                      ? { download: "" }
+                      : {})}
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
+                >
+                  {resourceLabels[resource.action]}
+                  <span className="sr-only">: {resource.title}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function Prompts({ prompts }: { prompts: EventPrompt[] }) {
+  return (
+    <section
+      aria-labelledby="event-prompts-title"
+      className="border-t border-ink/10 px-5 py-8 md:px-8 md:py-10"
+    >
+      <div className="mx-auto max-w-2xl">
+        <h3
+          id="event-prompts-title"
+          className="text-sm font-semibold tracking-[0.06em] text-ink uppercase"
+        >
+          Build prompts
+        </h3>
+        <p className="mt-2 text-base leading-7 text-pine">
+          Copy each prompt into Google AI Studio in order. Paste it exactly as written.
+        </p>
+        <ol className="mt-5 grid gap-3">
+          {prompts.map((prompt, index) => (
+            <PromptCard
+              key={prompt.title}
+              prompt={prompt}
+              label={`Prompt ${index + 1} of ${prompts.length}`}
+            />
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+function PromptCard({ prompt, label }: { prompt: EventPrompt; label: string }) {
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+
+  useEffect(() => {
+    if (status === "idle") return;
+    const timer = window.setTimeout(() => setStatus("idle"), 2000);
+    return () => window.clearTimeout(timer);
+  }, [status]);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(prompt.text);
+      setStatus("copied");
+    } catch {
+      setStatus("failed");
+    }
+  }
+
+  return (
+    <li className="rounded-sm border border-ink/10 bg-paper p-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-medium tracking-[0.06em] text-pine uppercase">{label}</p>
+          <p className="mt-1 text-base font-medium tracking-[-0.03em] text-ink">{prompt.title}</p>
+          {prompt.description ? (
+            <p className="mt-0.5 text-sm leading-6 text-pine">{prompt.description}</p>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={copy}
+          className="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center bg-ink px-5 text-sm font-medium tracking-[-0.03em] text-cream"
+        >
+          {status === "copied" ? "Copied!" : status === "failed" ? "Copy failed" : "Copy prompt"}
+          <span className="sr-only">: {prompt.title}</span>
+        </button>
+      </div>
+      <span aria-live="polite" className="sr-only">
+        {status === "copied" ? `${prompt.title} prompt copied` : ""}
+      </span>
+      <details className="group mt-3">
+        <summary className="cursor-pointer text-sm font-medium text-ink underline-offset-4 hover:underline">
+          View prompt
+        </summary>
+        <pre className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap wrap-break-word rounded-sm border border-ink/10 bg-cream/50 p-4 font-mono text-xs leading-5 text-ink">
+          {prompt.text}
+        </pre>
+      </details>
+    </li>
   );
 }
 
