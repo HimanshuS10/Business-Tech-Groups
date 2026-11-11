@@ -1,3 +1,5 @@
+import { aiStudioPrompts } from "@/data/ai-studio-prompts";
+
 export type EventItem = {
   id: string;
   title: string;
@@ -27,10 +29,34 @@ export type EventItem = {
   imageOnWhite?: boolean;
   /** Set when BTG publishes a real registration page. Hidden until then. */
   registrationHref?: string;
+  /** Files and links attendees need, shown in the detail dialog. */
+  resources?: EventResource[];
+  /** Copy-and-paste prompts shown in the detail dialog, in order. */
+  prompts?: EventPrompt[];
   /** Visible label for the registration link. Defaults to "Register". */
   registrationLabel?: string;
   /** Post-event write-up shown in the detail dialog. Add once the event has happened. */
   recap?: EventRecap;
+};
+
+export type EventPrompt = {
+  title: string;
+  description?: string;
+  /** Copied exactly as written. */
+  text: string;
+};
+
+/**
+ * "copy" opens Google's make-a-copy page, "download" saves the file,
+ * "open" opens the link in a new tab.
+ */
+export type EventResource = {
+  title: string;
+  description?: string;
+  href: string;
+  action: "copy" | "download" | "open";
+  /** Shown as a thumbnail for image resources. */
+  previewSrc?: string;
 };
 
 /**
@@ -69,6 +95,36 @@ export const upcomingEvents: EventItem[] = [
     posterSrc: "/images/events/google-ai-studio-poster.png",
     imageAlt: "Google AI Studio logo",
     imageOnWhite: true,
+    resources: [
+      {
+        title: "Customer reviews (Google Sheet)",
+        description:
+          "Make your own copy, set sharing to \"Anyone with the link can view\", and paste its link into your app.",
+        href: "https://docs.google.com/spreadsheets/d/1S5BThtvcX0TKGaigUlZpx-SJ4lv22k2_vCSGzp2ibwI/copy",
+        action: "copy",
+      },
+      {
+        title: "Inventory data (CSV)",
+        description: "Download the inventory as a CSV file to upload on your app's Inventory page.",
+        href: "https://docs.google.com/spreadsheets/d/1F0sae31e0Iqad-PP6PwYf4SQxyvpUOKT4bZTDYjXvRo/export?format=csv",
+        action: "download",
+      },
+      {
+        title: "GryphCafe logo",
+        description: "Brand logo for the GryphCafe Coffee & Co. case.",
+        href: "/images/events/google-ai-studio/gryphcafe-logo.png",
+        action: "download",
+        previewSrc: "/images/events/google-ai-studio/gryphcafe-logo.png",
+      },
+      {
+        title: "Dashboard reference",
+        description: "Example product dashboard layout to use as design inspiration.",
+        href: "/images/events/google-ai-studio/dashboard-reference.png",
+        action: "download",
+        previewSrc: "/images/events/google-ai-studio/dashboard-reference.png",
+      },
+    ],
+    prompts: aiStudioPrompts,
     registrationHref:
       "https://docs.google.com/forms/d/e/1FAIpQLSd_GMn0P521RLMWyj9lucOvM9eN4bRGz3fJSTcL9SKStU2Lmg/viewform?usp=dialog",
     registrationLabel: "Register for the Workshop",
