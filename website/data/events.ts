@@ -139,6 +139,12 @@ export const upcomingEvents: EventItem[] = [
       "A vibe coding case competition: student teams build software with AI, then pitch it to industry judges.",
     summary:
       "Prompt & Pitch is BTG's vibe coding case competition. Student teams use AI to build their own software, then pitch it to a panel of industry judges. More details will be shared closer to the event.",
+    imageSrc: "/images/events/prompt-to-pitch.png",
+    imageAlt: "Prompt to Pitch: BTG Case Competition",
+    imageOnWhite: true,
+    registrationHref:
+      "https://docs.google.com/forms/d/e/1FAIpQLSfBBHlR2HVUW_d50XUcUy2SpoQdaRVhRPKxJ79QRcZ_XieKgQ/viewform",
+    registrationLabel: "Register for Prompt To Pitch",
   },
 ];
 
