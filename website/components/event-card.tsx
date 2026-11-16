@@ -16,7 +16,7 @@ export function EventList({
   return (
     <div className="flex flex-col gap-5">
       {events.map((event, index) => (
-        <div key={event.id} data-reveal style={{ transitionDelay: `${Math.min(index, 3) * 100}ms` }}>
+        <div key={event.id} data-reveal suppressHydrationWarning style={{ transitionDelay: `${Math.min(index, 3) * 100}ms` }}>
           <EventListing event={event} />
         </div>
       ))}

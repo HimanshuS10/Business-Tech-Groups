@@ -35,7 +35,7 @@ export function AboutPreview() {
   return (
     <section className="bg-cream">
       <Container className="py-14 md:py-16">
-        <div data-reveal>
+        <div data-reveal suppressHydrationWarning>
           <p className="text-sm font-medium tracking-[-0.03em] text-pine">About BTG</p>
           <h2 className="mt-3 max-w-md text-3xl font-medium leading-[1.08] tracking-[-0.05em] text-ink md:text-[2.75rem]">
             Where ideas meet{" "}
@@ -45,7 +45,7 @@ export function AboutPreview() {
 
         <ul className="mt-8 grid gap-4 sm:gap-5 md:grid-cols-3">
           {pillars.map((pillar, index) => (
-            <li key={pillar.title} data-reveal style={{ transitionDelay: `${index * 110}ms` }}>
+            <li key={pillar.title} data-reveal suppressHydrationWarning style={{ transitionDelay: `${index * 110}ms` }}>
               <article
                 className={`flex flex-col justify-between rounded-md p-5 md:h-[240px] md:p-6 lg:h-[260px] ${pillar.surface}`}
               >
@@ -61,7 +61,7 @@ export function AboutPreview() {
           ))}
         </ul>
 
-        <dl data-reveal className="mt-10 grid grid-cols-3 gap-4 border-t border-ink/15 pt-8">
+        <dl data-reveal suppressHydrationWarning className="mt-10 grid grid-cols-3 gap-4 border-t border-ink/15 pt-8">
           {stats.map((stat) => (
             <div key={stat.label}>
               <dt className="sr-only">{stat.label}</dt>
