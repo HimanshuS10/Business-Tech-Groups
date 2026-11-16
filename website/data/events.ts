@@ -35,8 +35,37 @@ export type EventItem = {
   prompts?: EventPrompt[];
   /** Visible label for the registration link. Defaults to "Register". */
   registrationLabel?: string;
+  /** Set once the registration form stops taking responses. Shows "Registration closed" instead of the link. */
+  registrationClosed?: boolean;
+  /** Extra key facts shown next to Date and Time in the detail dialog, e.g. prizes. */
+  facts?: { label: string; value: string; detail?: string }[];
+  /** Extra sections under "About this event", e.g. how the competition works. */
+  details?: EventSection[];
+  /** Key dates before and on the event day, shown in order in the detail dialog. */
+  timeline?: EventScheduleItem[];
+  /** Run of show for the event day, shown in order in the detail dialog. */
+  agenda?: EventScheduleItem[];
   /** Post-event write-up shown in the detail dialog. Add once the event has happened. */
   recap?: EventRecap;
+};
+
+/**
+ * One row of a timeline or day schedule. `start` and `end` are ISO date-times
+ * (Guelph time, -05:00 in November); when both are set the dialog marks the row
+ * as done or happening now.
+ */
+export type EventScheduleItem = {
+  when: string;
+  title: string;
+  detail?: string;
+  start?: string;
+  end?: string;
+};
+
+export type EventSection = {
+  heading: string;
+  paragraphs?: string[];
+  points?: string[];
 };
 
 export type EventPrompt = {
@@ -81,15 +110,71 @@ export type EventRecap = {
  */
 export const upcomingEvents: EventItem[] = [
   {
-    id: "google-ai-studio-workshop",
-    title: "Google AI Studio Workshop",
-    dateLabel: "Date to be announced",
-    timeLabel: null,
-    category: "Workshop",
+    id: "prompt-and-pitch",
+    title: "Prompt & Pitch",
+    dateLabel: "November 21, 2026",
+    timeLabel: "9:00 AM–4:00 PM",
+    category: "Case Competition",
+    location: "Macdonald Hall",
+    address: "University of Guelph, 74 Macdonald Street, Guelph, ON N1G 2W1",
     preview:
-      "Build a real app with Google AI Studio, no coding needed. Learn prompt engineering by solving a real business problem as a room.",
+      "BTG's AI-powered case competition: teams build a working solution with AI, then pitch it to industry judges for $3,000 in prizes.",
     summary:
-      "A hands-on, project-based workshop where we'll build a project together in Google AI Studio. You'll learn how prompt engineering works, brainstorm and present ideas for a real business problem, and narrow it down into key use cases to build out. No coding experience needed: bring a charged laptop and create a free Google AI Studio account at aistudio.google.com before the event so we can start building right away.",
+      "Prompt & Pitch is BTG's AI-powered case competition, open to students of all experience levels. Teams analyze a real business case, then use AI tools such as vibe coding and prompt engineering to build a practical solution. After a five-day building period, they pitch it to a panel of industry judges, and the top three teams share $3,000 in prizes. No coding or technical experience is needed.",
+    imageSrc: "/images/events/prompt-to-pitch.png",
+    imageAlt: "Prompt to Pitch: BTG Case Competition",
+    imageOnWhite: true,
+    facts: [{ label: "Prizes", value: "$3,000 in prizes", detail: "1st $1,500 · 2nd $1,000 · 3rd $500" }],
+    timeline: [
+      {
+        when: "November 13",
+        title: "Registration closes",
+        detail: "11:59 PM",
+        end: "2026-11-13T23:59:00-05:00",
+      },
+      {
+        when: "November 15",
+        title: "Case release",
+        detail: "1:00 PM",
+        start: "2026-11-15T13:00:00-05:00",
+        end: "2026-11-15T13:00:00-05:00",
+      },
+      {
+        when: "November 15–19",
+        title: "Building period",
+        detail: "Ends November 19 at 11:59 PM",
+        start: "2026-11-15T13:00:00-05:00",
+        end: "2026-11-19T23:59:00-05:00",
+      },
+      {
+        when: "November 21",
+        title: "Presentation Day",
+        detail: "9:00 AM–4:00 PM at Macdonald Hall",
+        start: "2026-11-21T09:00:00-05:00",
+        end: "2026-11-21T16:00:00-05:00",
+      },
+    ],
+    registrationHref:
+      "https://docs.google.com/forms/d/e/1FAIpQLSfBBHlR2HVUW_d50XUcUy2SpoQdaRVhRPKxJ79QRcZ_XieKgQ/viewform",
+    registrationLabel: "Register for Prompt To Pitch",
+    registrationClosed: true,
+  },
+];
+
+/** Most recent first. The Smarter Than AI Panel stays last; the events page features it separately. */
+export const pastEvents: EventItem[] = [
+  {
+    id: "google-ai-studio-workshop",
+    title: "Tools Decoded: Google AI Studio Workshop",
+    dateLabel: "November 11, 2026",
+    timeLabel: "7:30–9:30 PM",
+    category: "Workshop",
+    location: "Rozanski Hall 105",
+    address: "University of Guelph",
+    preview:
+      "Students built a working café app in Google AI Studio using plain-English prompts, with no coding needed.",
+    summary:
+      "Tools Decoded was BTG's hands-on workshop on Google AI Studio. Students learned how a strong prompt is built, then used Gemini to turn a real business problem into a working app, with no coding experience needed. The prompts and files are still below if you want to build it yourself.",
     imageSrc: "/images/events/google-ai-studio.png",
     listImageSrc: "/images/events/google-ai-studio-square.png",
     posterSrc: "/images/events/google-ai-studio-poster.png",
@@ -125,31 +210,42 @@ export const upcomingEvents: EventItem[] = [
       },
     ],
     prompts: aiStudioPrompts,
-    registrationHref:
-      "https://docs.google.com/forms/d/e/1FAIpQLSd_GMn0P521RLMWyj9lucOvM9eN4bRGz3fJSTcL9SKStU2Lmg/viewform?usp=dialog",
-    registrationLabel: "Register for the Workshop",
+    recap: {
+      intro:
+        "BTG's second workshop of the year brought students and their laptops to Rozanski Hall 105 for a night of building, not just talking about AI. Together we built a management app for GryphCafe, a campus café whose owner has customer reviews and stock levels spread across too many places, using nothing but plain-English prompts in Google AI Studio.",
+      // Add workshop photos here once they are approved: { src, alt } in /public/images/events/google-ai-studio/.
+      takeaways: [
+        "A strong prompt has structure: role, context, input, task, output, colours, and constraints.",
+        "Specific beats vague. Telling the AI exactly what to build, and what to leave out, gives a much better first version.",
+        "AI app builders are made for prototypes. Google AI Studio's Build mode turned plain English into a working app connected to a live Google Sheet.",
+      ],
+      sections: [
+        {
+          heading: "The case: GryphCafe",
+          paragraphs: [
+            "The room started by brainstorming what a café owner actually needs from a simple CRM, then narrowed the ideas down to three use cases: understanding customer reviews, tracking inventory, and seeing the whole business on one screen.",
+          ],
+        },
+        {
+          heading: "Building the app, one prompt at a time",
+          paragraphs: [
+            "Each prompt adds a new page to the same app, so attendees pasted them in order and waited for each build to finish before moving on.",
+          ],
+          points: [
+            "Customer Reviews: the app reads reviews from a Google Sheet, refreshes every 10 seconds, and uses Gemini to write an AI Action Plan with three things customers love, three complaints, and three actions for the week.",
+            "Inventory: upload a stock spreadsheet, change counts with + and − buttons, and see low items flagged in red.",
+            "Dashboard: the key numbers, low-stock alerts, and this week's actions together on one screen.",
+          ],
+        },
+        {
+          heading: "Try it yourself",
+          paragraphs: [
+            "Missed the workshop? Every file and prompt we used is below. Paste the prompts into Google AI Studio in order, and let each build finish before you paste the next one.",
+          ],
+        },
+      ],
+    },
   },
-  {
-    id: "prompt-and-pitch",
-    title: "Prompt & Pitch",
-    dateLabel: "November 21, 2026",
-    timeLabel: null,
-    category: "Case Competition",
-    preview:
-      "A vibe coding case competition: student teams build software with AI, then pitch it to industry judges.",
-    summary:
-      "Prompt & Pitch is BTG's vibe coding case competition. Student teams use AI to build their own software, then pitch it to a panel of industry judges. More details will be shared closer to the event.",
-    imageSrc: "/images/events/prompt-to-pitch.png",
-    imageAlt: "Prompt to Pitch: BTG Case Competition",
-    imageOnWhite: true,
-    registrationHref:
-      "https://docs.google.com/forms/d/e/1FAIpQLSfBBHlR2HVUW_d50XUcUy2SpoQdaRVhRPKxJ79QRcZ_XieKgQ/viewform",
-    registrationLabel: "Register for Prompt To Pitch",
-  },
-];
-
-/** Most recent first. The Smarter Than AI Panel stays last; the events page features it separately. */
-export const pastEvents: EventItem[] = [
   {
     id: "charity-5k",
     title: "Charity 5K Run",
