@@ -18,7 +18,7 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
   return (
     <section className="bg-paper">
       <Container className="py-14 md:py-16 lg:py-20">
-        <div data-reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div data-reveal suppressHydrationWarning className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-xl">
             <p className={eyebrow}>What&apos;s Happening</p>
             <h2 className={sectionTitle}>Upcoming Events</h2>
@@ -32,7 +32,7 @@ export function UpcomingEvents({ events }: { events: EventItem[] }) {
         </div>
         <ul className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event, index) => (
-            <li key={event.id} data-reveal className="h-full" style={{ transitionDelay: `${index * 110}ms` }}>
+            <li key={event.id} data-reveal suppressHydrationWarning className="h-full" style={{ transitionDelay: `${index * 110}ms` }}>
               <HomeEventCard event={event} />
             </li>
           ))}
@@ -71,7 +71,7 @@ function HomeEventCard({ event }: { event: EventItem }) {
         <div className="mt-auto pt-6">
           <div
             className={`flex flex-wrap items-center gap-4 border-t border-ink/10 pt-4 ${
-              event.registrationHref ? "justify-between" : "justify-end"
+              event.registrationHref || event.registrationClosed ? "justify-between" : "justify-end"
             }`}
           >
             <EventRegistrationLink event={event} />

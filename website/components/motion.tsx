@@ -8,6 +8,10 @@ const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: r
  * Fades `[data-reveal]` elements up as they scroll into view. Anything already
  * on screen when the page loads is left as is, so nothing flashes; content
  * stays visible if JavaScript never runs.
+ *
+ * This runs from the root layout, so it can set `data-shown` before a page's
+ * own loading boundary has hydrated. Give every `data-reveal` element
+ * `suppressHydrationWarning` so React accepts that extra attribute.
  */
 export function ScrollReveal() {
   useEffect(() => {

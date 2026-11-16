@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ContactForm } from "@/components/contact-form";
 import { Container } from "@/components/container";
 import { sectionTitle } from "@/components/type";
+import { clubEmail } from "@/data/site";
 import { pageMetadata, socialShare } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -32,14 +32,16 @@ export default function ContactPage() {
       <section className="bg-paper">
         <Container className="py-14 md:py-16">
           <div className="mx-auto max-w-[720px] text-center">
-            <h2 className={sectionTitle}>Send us a message</h2>
+            <h2 className={sectionTitle}>Email us</h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-pine">
-              Tell us what you&apos;re reaching out about. Sending is turned off until BTG confirms
-              where messages should go.
+              Tell us what you&apos;re reaching out about and we&apos;ll get back to you.
             </p>
-          </div>
-          <div className="mt-8">
-            <ContactForm startedAt={0} />
+            <a
+              href={`mailto:${clubEmail}`}
+              className="mt-6 inline-block text-2xl font-medium tracking-[-0.03em] text-ink underline decoration-ink/30 underline-offset-[6px] transition-colors hover:decoration-ink md:text-3xl"
+            >
+              {clubEmail}
+            </a>
           </div>
           <p className="mx-auto mt-8 max-w-[720px] text-center text-sm leading-6 text-pine">
             Reaching out on behalf of a company?{" "}

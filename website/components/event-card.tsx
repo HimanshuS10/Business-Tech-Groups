@@ -16,7 +16,7 @@ export function EventList({
   return (
     <div className="flex flex-col gap-5">
       {events.map((event, index) => (
-        <div key={event.id} data-reveal style={{ transitionDelay: `${Math.min(index, 3) * 100}ms` }}>
+        <div key={event.id} data-reveal suppressHydrationWarning style={{ transitionDelay: `${Math.min(index, 3) * 100}ms` }}>
           <EventListing event={event} />
         </div>
       ))}
@@ -77,6 +77,13 @@ export function EventMeta({ event, className = "" }: { event: EventItem; classNa
 }
 
 export function EventRegistrationLink({ event }: { event: EventItem }) {
+  if (event.registrationClosed) {
+    return (
+      <span className="relative z-10 inline-flex min-h-11 items-center border border-ink/15 px-4 text-sm font-medium tracking-[-0.03em] text-pine">
+        Registration closed
+      </span>
+    );
+  }
   if (!event.registrationHref) return null;
 
   return (

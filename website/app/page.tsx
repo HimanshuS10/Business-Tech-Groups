@@ -118,14 +118,14 @@ export default function HomePage() {
 
       <section className="bg-paper">
         <Container className="grid items-start gap-8 py-14 md:py-16 lg:grid-cols-12 lg:gap-16 lg:py-20">
-          <div data-reveal className="lg:col-span-5">
+          <div data-reveal suppressHydrationWarning className="lg:col-span-5">
             <p className={eyebrow}>Questions</p>
             <h2 className={sectionTitle}>A few things worth knowing.</h2>
             <p className="mt-4 max-w-sm text-base leading-7 text-pine">
               Find out more about events, getting involved, and connecting with BTG.
             </p>
           </div>
-          <div data-reveal className="delay-150 lg:col-span-7">
+          <div data-reveal suppressHydrationWarning className="delay-150 lg:col-span-7">
             <FaqList items={faqs} />
           </div>
         </Container>

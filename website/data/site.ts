@@ -34,6 +34,9 @@ export const socials = [
   },
 ] as const;
 
+/** General inbox for the club. */
+export const clubEmail = "btg@uoguelph.ca";
+
 export const corporateContact = {
   name: "Liam Sharpe",
   role: "Director of Corporate Relations",

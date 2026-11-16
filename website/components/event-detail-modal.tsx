@@ -2,13 +2,20 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 // import { useCallback, useEffect, useRef } from "react";
 import { EventRegistrationLink } from "@/components/event-card";
 
 
 import { PhotoRing } from "@/components/photo-ring";
-import type { EventItem, EventPrompt, EventRecap, EventResource } from "@/data/events";
+import type {
+  EventItem,
+  EventPrompt,
+  EventRecap,
+  EventResource,
+  EventScheduleItem,
+  EventSection,
+} from "@/data/events";
 
 export function EventDetailModal({ events }: { events: EventItem[] }) {
   const params = useSearchParams();
@@ -139,12 +146,18 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
                   {event.location ? (
                     <Fact label="Location" value={event.location} detail={event.address} wide />
                   ) : null}
+                  {event.facts?.map((fact) => (
+                    <Fact key={fact.label} label={fact.label} value={fact.value} detail={fact.detail} wide />
+                  ))}
                 </dl>
                 <h3 className="mt-7 text-sm font-semibold tracking-[0.06em] text-ink uppercase">
                   About this event
                 </h3>
                 <p className="mt-2 text-base leading-7 text-pine">{event.summary}</p>
-                {event.registrationHref ? (
+                {event.details?.map((section) => (
+                  <Section key={section.heading} section={section} />
+                ))}
+                {event.registrationHref || event.registrationClosed ? (
                   <div className="mt-6">
                     <EventRegistrationLink event={event} />
                   </div>
@@ -152,6 +165,22 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
               </div>
             </div>
 
+            {event.timeline?.length ? (
+              <Schedule
+                id="event-timeline-title"
+                title="Timeline"
+                intro="Key dates, in order. All times are Guelph time."
+                items={event.timeline}
+              />
+            ) : null}
+            {event.agenda?.length ? (
+              <Schedule
+                id="event-agenda-title"
+                title="Day schedule"
+                intro={`${event.dateLabel}. The schedule may change before the day.`}
+                items={event.agenda}
+              />
+            ) : null}
             {event.resources?.length ? <Resources resources={event.resources} /> : null}
             {event.prompts?.length ? <Prompts key={event.id} prompts={event.prompts} /> : null}
 
@@ -201,6 +230,114 @@ function Fact({
       <dd className="mt-1 text-base font-medium tracking-[-0.03em] text-ink">{value}</dd>
       {detail ? <dd className="mt-0.5 text-sm text-pine">{detail}</dd> : null}
     </div>
+  );
+}
+
+function Section({ section }: { section: EventSection }) {
+  return (
+    <div className="mt-6">
+      <h4 className="text-lg font-semibold tracking-[-0.035em] text-ink">{section.heading}</h4>
+      {section.paragraphs?.map((paragraph) => (
+        <p key={paragraph} className="mt-2 text-base leading-7 text-pine">
+          {paragraph}
+        </p>
+      ))}
+      {section.points?.length ? (
+        <ul className="mt-2 grid list-disc gap-2 pl-5 text-base leading-7 text-pine marker:text-sage">
+          {section.points.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+/** Minute-level clock for marking schedule rows. Null on the server, so nothing is marked there. */
+function subscribeToClock(onChange: () => void) {
+  const timer = window.setInterval(onChange, 60_000);
+  return () => window.clearInterval(timer);
+}
+
+function useNow() {
+  return useSyncExternalStore(
+    subscribeToClock,
+    () => Math.floor(Date.now() / 60_000) * 60_000,
+    () => null,
+  );
+}
+
+function scheduleStatus(item: EventScheduleItem, now: number | null) {
+  if (now === null) return null;
+  if (item.end && now > Date.parse(item.end)) return "done";
+  if (item.start && now >= Date.parse(item.start)) return "now";
+  return null;
+}
+
+function Schedule({
+  id,
+  title,
+  intro,
+  items,
+}: {
+  id: string;
+  title: string;
+  intro?: string;
+  items: EventScheduleItem[];
+}) {
+  const now = useNow();
+
+  return (
+    <section aria-labelledby={id} className="border-t border-ink/10 px-5 py-8 md:px-8 md:py-10">
+      <div className="mx-auto max-w-2xl">
+        <h3 id={id} className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">
+          {title}
+        </h3>
+        {intro ? <p className="mt-2 text-base leading-7 text-pine">{intro}</p> : null}
+        <ol className="mt-5 grid gap-px overflow-hidden rounded-sm border border-ink/10 bg-ink/10">
+          {items.map((item) => {
+            const status = scheduleStatus(item, now);
+            return (
+              <li
+                key={`${item.when}-${item.title}`}
+                className="grid gap-1 bg-paper px-4 py-3 sm:grid-cols-[9.5rem_1fr] sm:gap-5"
+              >
+                <p
+                  className={`text-sm font-semibold tracking-[-0.02em] sm:pt-0.5 ${
+                    status === "done" ? "text-pine/70" : "text-ink"
+                  }`}
+                >
+                  {item.when}
+                </p>
+                <div>
+                  <p
+                    className={`flex flex-wrap items-center gap-2 text-base font-medium tracking-[-0.03em] ${
+                      status === "done" ? "text-pine" : "text-ink"
+                    }`}
+                  >
+                    {item.title}
+                    {status === "now" ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-0.5 text-xs font-medium tracking-[-0.01em] text-ink">
+                        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-sage" />
+                        Happening now
+                      </span>
+                    ) : null}
+                    {status === "done" ? (
+                      <span className="rounded-full border border-ink/15 px-2.5 py-0.5 text-xs font-medium tracking-[-0.01em] text-pine">
+                        Done
+                      </span>
+                    ) : null}
+                  </p>
+                  {item.detail ? (
+                    <p className="mt-0.5 text-sm leading-6 text-pine">{item.detail}</p>
+                  ) : null}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
   );
 }
 
