@@ -77,6 +77,13 @@ export function EventMeta({ event, className = "" }: { event: EventItem; classNa
 }
 
 export function EventRegistrationLink({ event }: { event: EventItem }) {
+  if (event.registrationClosed) {
+    return (
+      <span className="relative z-10 inline-flex min-h-11 items-center border border-ink/15 px-4 text-sm font-medium tracking-[-0.03em] text-pine">
+        Registration closed
+      </span>
+    );
+  }
   if (!event.registrationHref) return null;
 
   return (
