@@ -9,6 +9,7 @@ import { EventRegistrationLink } from "@/components/event-card";
 
 import { PhotoRing } from "@/components/photo-ring";
 import type {
+  EventGuide,
   EventItem,
   EventPrompt,
   EventRecap,
@@ -181,7 +182,10 @@ export function EventDetailModal({ events }: { events: EventItem[] }) {
                 items={event.agenda}
               />
             ) : null}
-            {event.resources?.length ? <Resources resources={event.resources} /> : null}
+            {event.guide ? <Guide guide={event.guide} /> : null}
+            {event.resources?.length ? (
+              <Resources resources={event.resources} past={Boolean(event.recap)} />
+            ) : null}
             {event.prompts?.length ? <Prompts key={event.id} prompts={event.prompts} /> : null}
 
             <section
@@ -347,7 +351,45 @@ const resourceLabels: Record<EventResource["action"], string> = {
   open: "Open",
 };
 
-function Resources({ resources }: { resources: EventResource[] }) {
+function Guide({ guide }: { guide: EventGuide }) {
+  return (
+    <section
+      aria-labelledby="event-guide-title"
+      className="border-t border-ink/10 px-5 py-8 md:px-8 md:py-10"
+    >
+      <div className="mx-auto max-w-2xl rounded-sm bg-ink p-6 text-cream md:p-8">
+        <p className="font-serif text-xl italic leading-none text-cream/70">Workshop guide</p>
+        <h3
+          id="event-guide-title"
+          className="mt-3 text-2xl font-semibold leading-[1.15] tracking-[-0.04em]"
+        >
+          {guide.heading}
+        </h3>
+        <p className="mt-3 text-base leading-7 text-cream/80">{guide.body}</p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={guide.href}
+            download=""
+            className="inline-flex min-h-11 items-center justify-center bg-cream px-5 text-sm font-medium tracking-[-0.03em] text-ink"
+          >
+            Download the guide
+          </a>
+          <a
+            href={guide.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center border border-cream/30 px-5 text-sm font-medium tracking-[-0.03em] text-cream"
+          >
+            Open in a new tab
+          </a>
+          {guide.meta ? <p className="text-sm text-cream/60 sm:ml-2">{guide.meta}</p> : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Resources({ resources, past }: { resources: EventResource[]; past: boolean }) {
   return (
     <section
       aria-labelledby="event-resources-title"
@@ -361,7 +403,9 @@ function Resources({ resources }: { resources: EventResource[] }) {
           Workshop resources
         </h3>
         <p className="mt-2 text-base leading-7 text-pine">
-          Grab these before the event so you&apos;re ready to build.
+          {past
+            ? "Everything you need to build the app yourself."
+            : "Grab these before the event so you're ready to build."}
         </p>
         <ul className="mt-5 grid gap-3">
           {resources.map((resource) => {

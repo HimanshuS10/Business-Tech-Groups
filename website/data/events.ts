@@ -29,6 +29,8 @@ export type EventItem = {
   imageOnWhite?: boolean;
   /** Set when BTG publishes a real registration page. Hidden until then. */
   registrationHref?: string;
+  /** Self-paced guide (e.g. a PDF tutorial), featured above the resources in the detail dialog. */
+  guide?: EventGuide;
   /** Files and links attendees need, shown in the detail dialog. */
   resources?: EventResource[];
   /** Copy-and-paste prompts shown in the detail dialog, in order. */
@@ -73,6 +75,15 @@ export type EventPrompt = {
   description?: string;
   /** Copied exactly as written. */
   text: string;
+};
+
+export type EventGuide = {
+  heading: string;
+  body: string;
+  /** Path to the file in /public. */
+  href: string;
+  /** Short file facts, e.g. "PDF · 33 pages". */
+  meta?: string;
 };
 
 /**
@@ -201,6 +212,12 @@ export const pastEvents: EventItem[] = [
     posterSrc: "/images/events/google-ai-studio-poster.png",
     imageAlt: "Google AI Studio logo",
     imageOnWhite: true,
+    guide: {
+      heading: "Missed the workshop? Build it on your own time.",
+      body: "The full workshop guide walks you through all three builds, step by step, with a screenshot for every click. It also covers how a good prompt is built and what to do when something breaks. Grab the files and prompts below, open the guide, and build the GryphCafe dashboard at your own pace. It takes about 45 to 60 minutes, and no coding experience is needed.",
+      href: "/guides/btg-google-ai-studio-workshop-guide.pdf",
+      meta: "PDF · 33 pages · 5.7 MB",
+    },
     resources: [
       {
         title: "Customer reviews (Google Sheet)",
@@ -261,7 +278,7 @@ export const pastEvents: EventItem[] = [
         {
           heading: "Try it yourself",
           paragraphs: [
-            "Missed the workshop? Every file and prompt we used is below. Paste the prompts into Google AI Studio in order, and let each build finish before you paste the next one.",
+            "Missed the workshop? Download the workshop guide above for a step-by-step walkthrough. Every file and prompt we used is up there too. Paste the prompts into Google AI Studio in order, and let each build finish before you paste the next one.",
           ],
         },
       ],
