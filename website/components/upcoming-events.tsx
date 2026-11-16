@@ -71,7 +71,7 @@ function HomeEventCard({ event }: { event: EventItem }) {
         <div className="mt-auto pt-6">
           <div
             className={`flex flex-wrap items-center gap-4 border-t border-ink/10 pt-4 ${
-              event.registrationHref ? "justify-between" : "justify-end"
+              event.registrationHref || event.registrationClosed ? "justify-between" : "justify-end"
             }`}
           >
             <EventRegistrationLink event={event} />
