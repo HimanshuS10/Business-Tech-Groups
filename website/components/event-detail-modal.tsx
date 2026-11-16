@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { EventRegistrationLink } from "@/components/event-card";
 
 
+import { detailsLooks, eventTheme, scheduleLooks } from "@/components/event-theme";
 import { PhotoRing } from "@/components/photo-ring";
 import type {
   EventItem,
@@ -234,16 +235,17 @@ function Fact({
 }
 
 function Section({ section }: { section: EventSection }) {
+  const look = detailsLooks[eventTheme];
   return (
-    <div className="mt-6">
-      <h4 className="text-lg font-semibold tracking-[-0.035em] text-ink">{section.heading}</h4>
+    <div className={look.box}>
+      <h4 className={look.heading}>{section.heading}</h4>
       {section.paragraphs?.map((paragraph) => (
-        <p key={paragraph} className="mt-2 text-base leading-7 text-pine">
+        <p key={paragraph} className={look.text}>
           {paragraph}
         </p>
       ))}
       {section.points?.length ? (
-        <ul className="mt-2 grid list-disc gap-2 pl-5 text-base leading-7 text-pine marker:text-sage">
+        <ul className={look.list}>
           {section.points.map((point) => (
             <li key={point}>{point}</li>
           ))}
@@ -286,51 +288,43 @@ function Schedule({
   items: EventScheduleItem[];
 }) {
   const now = useNow();
+  const look = scheduleLooks[eventTheme];
 
   return (
-    <section aria-labelledby={id} className="border-t border-ink/10 px-5 py-8 md:px-8 md:py-10">
+    <section aria-labelledby={id} className={look.section}>
       <div className="mx-auto max-w-2xl">
-        <h3 id={id} className="text-sm font-semibold tracking-[0.06em] text-ink uppercase">
+        <h3 id={id} className={look.heading}>
           {title}
         </h3>
-        {intro ? <p className="mt-2 text-base leading-7 text-pine">{intro}</p> : null}
-        <ol className="mt-5 grid gap-px overflow-hidden rounded-sm border border-ink/10 bg-ink/10">
+        {intro ? <p className={look.intro}>{intro}</p> : null}
+        <ol className={look.list}>
           {items.map((item) => {
             const status = scheduleStatus(item, now);
+            const dot = status === "now" ? look.dotNow : status === "done" ? look.dotDone : look.dot;
             return (
-              <li
-                key={`${item.when}-${item.title}`}
-                className="grid gap-1 bg-paper px-4 py-3 sm:grid-cols-[9.5rem_1fr] sm:gap-5"
-              >
-                <p
-                  className={`text-sm font-semibold tracking-[-0.02em] sm:pt-0.5 ${
-                    status === "done" ? "text-pine/70" : "text-ink"
-                  }`}
-                >
-                  {item.when}
-                </p>
+              <li key={`${item.when}-${item.title}`} className={look.row}>
+                {dot ? (
+                  <span aria-hidden className={dot}>
+                    {status === "done" ? (
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                        <path d="M2.5 6.5 5 9l4.5-6" stroke="currentColor" strokeWidth="1.75" />
+                      </svg>
+                    ) : null}
+                  </span>
+                ) : null}
+                <p className={status === "done" ? look.whenDone : look.when}>{item.when}</p>
                 <div>
-                  <p
-                    className={`flex flex-wrap items-center gap-2 text-base font-medium tracking-[-0.03em] ${
-                      status === "done" ? "text-pine" : "text-ink"
-                    }`}
-                  >
-                    {item.title}
+                  <p className="flex flex-wrap items-center gap-2">
+                    <span className={status === "done" ? look.titleDone : look.title}>{item.title}</span>
                     {status === "now" ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-0.5 text-xs font-medium tracking-[-0.01em] text-ink">
-                        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-sage" />
+                      <span className={look.now}>
+                        <span aria-hidden className={look.nowDot} />
                         Happening now
                       </span>
                     ) : null}
-                    {status === "done" ? (
-                      <span className="rounded-full border border-ink/15 px-2.5 py-0.5 text-xs font-medium tracking-[-0.01em] text-pine">
-                        Done
-                      </span>
-                    ) : null}
+                    {status === "done" ? <span className={look.done}>Done</span> : null}
                   </p>
-                  {item.detail ? (
-                    <p className="mt-0.5 text-sm leading-6 text-pine">{item.detail}</p>
-                  ) : null}
+                  {item.detail ? <p className={look.detail}>{item.detail}</p> : null}
                 </div>
               </li>
             );
